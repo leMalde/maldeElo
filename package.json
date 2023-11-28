@@ -1,0 +1,29 @@
+{
+	"name": "@malde/coolstuff",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "vite build --mode preview",
+		"preview": "vite preview",
+		"dev": "vite",
+		"logon": "vsts-npm-auth -config .npmrc"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@eyeshare/flex-framework": "0.1.0-ci.176",
+		"@eyeshare/shared": "0.2.0-ci.411",
+		"@eyeshare/web-components": "0.1.1-ci.1104",
+		"lit": "^3.0.2",
+		"reflect-metadata": "^0.1.13",
+		"tslib": "^2.4.0"
+	},
+	"devDependencies": {
+		"typescript": "5.1.6",
+		"vite": "^4.5.0",
+		"@eyeshare/tsconfig": "0.1.1-ci.8"
+	}
+}
