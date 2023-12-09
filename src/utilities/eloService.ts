@@ -22,13 +22,35 @@ export function CalculateChanges(gameRecord:GameRecord){
             var change = ChangeInElo(resultA!.player.elo, resultB!.player.elo, wA);
             resultA!.elochange += change;
             resultB!.elochange -= change;
+
+            resultA!.ratingchange += 100 * (wA - 0.5);
+            resultB!.ratingchange -= 100 * (wA - 0.5);
         } 
     }
 
     results.forEach(function(result){
         result.player.elo += result.elochange;
         result.playerelo = result.player.elo;
+        result.player.rating += result.ratingchange;
+        result.playerrating = result.player.rating;
         result.percent = 100 * result.score / topscore;
+        result.player.scorepercent += result.percent;
+
+        if (result.playerrating > result.player.bestrating)
+            result.player.bestrating = result.playerrating;
+        
+        if (result.playerrating < result.player.worstrating)
+            result.player.worstrating = result.playerrating;
+
+        if (result.playerelo > result.player.bestelo)
+            result.player.bestelo = result.playerelo;
+        
+        if (result.playerelo < result.player.worstelo)
+            result.player.worstelo = result.playerelo;
+
+        if (result.rank == 1)
+            result.player.winpercent++;
+
     });
 }
 

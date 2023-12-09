@@ -2,9 +2,7 @@ import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/gri
 import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
 import { html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
-import { GameModel } from './models/GameModel';
-import type { GameRecord } from './models/GameRecord';
-import { CalculateChanges } from './utilities/eloService';
+import type { PlayerModel } from './models/PlayerModel';
 
 
 /*interface PlayerModel {
@@ -24,7 +22,14 @@ export class AllPlayersPageComponent extends LitElement {
             columns: [ 
                 {path:"name", label:"Name", pinned:true, pinnable: true},
                 {path:"elo", label:"Elo rating", width: 130},
+                {path:"bestelo", label:"Best Elo", width: 130},
+                {path:"worstelo", label:"Worst Elo", width: 130},
                 {path:"games", label:"#Games"},
+                {path:"winpercent", label:"Win %"},
+                {path:"rating", label:"Rating", width: 130},                
+                {path:"bestrating", label:"Best Rating", width: 130},                
+                {path:"worstrating", label:"Worst Rating", width: 130},
+                {path:"scorepercent", label: "Avg Score %", width: 130}
             ],
             defaults: {
                 editable: false,

@@ -1,35 +1,16 @@
 import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { PlayerModel } from './models/PlayerModel';
 
 @customElement( 'malde-helloworld' )
 export class HelloWorldComponent extends LitElement {
 
 	protected playerData:PlayerModel[] = [
-        {
-            name: "Espen",
-            elo: 1000,
-            games: 0
-        },
-        {
-            name: "Roen",
-            elo: 1000,
-            games: 0
-        },
-        {
-            name: "Magga",
-            elo: 1000,
-            games: 0
-        },
-        {
-            name: "leMalde",
-            elo: 1000,
-            games: 0
-        },
-        {
-            name: "Gaute",
-            elo: 1000,
-            games: 0
-        }
+        new PlayerModel("Espen"),
+        new PlayerModel("Roen"),
+        new PlayerModel("Magga"),
+        new PlayerModel("leMalde"),
+        new PlayerModel("Gaute"),
     ]
 
 	override render() {

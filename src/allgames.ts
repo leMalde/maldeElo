@@ -6,6 +6,7 @@ import { GameModel } from './models/GameModel';
 import { ResultModel, type GameRecord } from './models/GameRecord';
 import { CalculateChanges, SetRanks } from './utilities/eloService';
 import { map } from 'lit/directives/map.js';
+import type { PlayerModel } from './models/PlayerModel';
 
 
 /*interface PlayerModel {
@@ -73,7 +74,7 @@ export class AllGamesPageComponent extends LitElement {
             subGrid: {
                 show: (_row, _context) => true,
                 template: (row) => {
-                    const keys =  ["Rank", "Name", "Score", "%", "Δ elo", "Elo" ];
+                    const keys =  ["Rank", "Name", "Score", "%", "Δ elo", "Elo", "Δ rating", "Rating" ];
 
                     return html`
 							<style>
@@ -125,6 +126,12 @@ export class AllGamesPageComponent extends LitElement {
                                     <div class="field">
                                         ${ result.playerelo }
 									</div>
+                                    <div class="field">
+                                        ${ result.ratingchange }
+									</div>
+                                    <div class="field">
+                                        ${ result.playerrating }
+									</div>
                                 </div>
                                 `) }
 
@@ -149,8 +156,11 @@ export class AllGamesPageComponent extends LitElement {
         this.initializeGameData();
         this.gameGridConfig.datasource = this.gameData;
         this.gameData.forEach(CalculateChanges);
+        this.playerData.forEach(player => {
+            player.scorepercent = Math.round(100 * player.scorepercent / player.games) / 100;
+            player.winpercent = Math.round(100 * 100 * player.winpercent / player.games) / 100;
+        });
         // this.dispatchEvent(new CustomEvent("change"));
-        console.log
 
         this.gameGridEl.configure(this.gameGridConfig);
     }
@@ -431,6 +441,56 @@ export class AllGamesPageComponent extends LitElement {
                     new ResultModel(this.playerData[1]!, 59), // Roen
                     new ResultModel(this.playerData[2]!, 33), // Magga
                     new ResultModel(this.playerData[3]!, 57), // leMalde
+                ]
+            },
+            {
+                date: new Date(2023, 11, 5),
+                game: new GameModel("Terraforming Mars"),
+                results: [
+                    new ResultModel(this.playerData[0]!, 62), // Espen
+                    new ResultModel(this.playerData[1]!, 48), // Roen
+                    new ResultModel(this.playerData[2]!, 53), // Magga
+                    new ResultModel(this.playerData[3]!, 59), // leMalde
+                ]
+            },
+            {
+                date: new Date(2023, 11, 5),
+                game: new GameModel("Dominion"),
+                results: [
+                    new ResultModel(this.playerData[0]!, 16), // Espen
+                    new ResultModel(this.playerData[1]!, 17), // Roen
+                    new ResultModel(this.playerData[2]!, 23), // Magga
+                    new ResultModel(this.playerData[3]!, 25), // leMalde
+                ]
+            },
+            {
+                date: new Date(2023, 11, 5),
+                game: new GameModel("Dominion"),
+                results: [
+                    new ResultModel(this.playerData[0]!, 16), // Espen
+                    new ResultModel(this.playerData[1]!, 6), // Roen
+                    new ResultModel(this.playerData[2]!, 24), // Magga
+                    new ResultModel(this.playerData[3]!, 22), // leMalde
+                ]
+            },
+            {
+                date: new Date(2023, 11, 8),
+                game: new GameModel("Dominion"),
+                results: [
+                    new ResultModel(this.playerData[0]!, 30), // Espen
+                    // new ResultModel(this.playerData[1]!, 6), // Roen
+                    new ResultModel(this.playerData[2]!, 37), // Magga
+                    new ResultModel(this.playerData[3]!, 56), // leMalde
+                ]
+            },
+            {
+                date: new Date(2023, 11, 8),
+                game: new GameModel("Terraforming Mars"),
+                results: [
+                    new ResultModel(this.playerData[0]!, 65), // Espen
+                    // new ResultModel(this.playerData[1]!, 6), // Roen
+                    new ResultModel(this.playerData[2]!, 62), // Magga
+                    new ResultModel(this.playerData[3]!, 94), // leMalde
                 ]
             },
 

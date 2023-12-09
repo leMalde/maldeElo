@@ -1,47 +1,41 @@
 {
+	"extends": "@eyeshare/tsconfig",
 	"compilerOptions": {
-		"outDir": "./dist/lib",
+		"rootDir": ".",
+		"baseUrl": ".",
 		"types": [
 			"vite/client",
-			"reflect-metadata",
 		],
-		"target": "ESNext",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"lib": [
-			"ESNext",
-			"DOM",
-			"DOM.Iterable",
-		],
-		"pretty": true,
-		"importHelpers": true,
-		"removeComments": true,
-		"strict": true,
-		"noUncheckedIndexedAccess": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"strictPropertyInitialization": false,
-		"forceConsistentCasingInFileNames": true,
-		"allowSyntheticDefaultImports": true,
-		"noImplicitOverride": true,
-		"useDefineForClassFields": false,
-		"noEmitOnError": true,
-		"allowJs": true,
-		"incremental": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"resolveJsonModule": true,
-		"noUnusedLocals": false,
-		"noUnusedParameters": false,
-		"noFallthroughCasesInSwitch": true,
-		"strictNullChecks": true,
+
+		"target": "ES2020",
 		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"noImplicitReturns": false,
-		"noImplicitAny": true,
-		"noImplicitThis": true,
+		"useDefineForClassFields": false,
+		"module": "ESNext",
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"sourceMap": true,
-		"declaration": true, // enables or disables d.ts files from being generated.
-		"declarationMap": true // enables/disables d.ts.map files from being generated.
-	}
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true
+
+	},
+	"include": [
+		"./**/*.ts",
+		"./**/*.d.ts",
+		"./**/*.js",
+		"src"
+	],
+	"exclude": [
+		"./**/*.test.ts",
+		"./**/*.bench.ts"
+	]
 }
