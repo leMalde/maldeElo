@@ -17,3 +17,7 @@ body {
     color: var(--esd-on-surface);
     background-color: var(--esd-background);
 }
+
+.listRow.even {
+    background-color: #414a3238 !important;
+}

@@ -5,6 +5,7 @@ export class GameRecord {
     date: Date;
     game: GameModel;
     results: ResultModel[];
+    winner?: PlayerModel;
 }
 
 export class ResultModel {
@@ -16,4 +17,12 @@ export class ResultModel {
     percent: number = 0;
 
     constructor(public player: PlayerModel, public score: number, public tiebreak: number = 0){}
+}
+
+export function ResetResultValues(result:ResultModel){
+    result.elochange = 0;
+    result.ratingchange = 0;
+    result.playerelo = 1000;
+    result.playerrating = 1000;
+    result.percent = 0;
 }

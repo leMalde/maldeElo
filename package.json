@@ -14,16 +14,17 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@eyeshare/flex-framework": "0.1.0-ci.176",
-		"@eyeshare/shared": "0.2.0-ci.411",
-		"@eyeshare/web-components": "0.1.1-ci.1104",
-		"lit": "^3.0.2",
-		"reflect-metadata": "^0.1.13",
-		"tslib": "^2.4.0"
+		"@eyeshare/flex-framework": "0.2.1-ci.11",
+		"@eyeshare/shared": "0.2.0-ci.423",
+		"@eyeshare/web-components": "0.1.1-ci.1157",
+		"lit": "^3.1.0",
+		"mongodb": "^6.3.0",
+		"reflect-metadata": "^0.2.1",
+		"tslib": "^2.6.2"
 	},
 	"devDependencies": {
-		"typescript": "5.1.6",
-		"vite": "^4.5.0",
-		"@eyeshare/tsconfig": "0.1.1-ci.8"
+		"@eyeshare/tsconfig": "0.1.1-ci.8",
+		"typescript": "5.3.3",
+		"vite": "^5.0.11"
 	}
 }

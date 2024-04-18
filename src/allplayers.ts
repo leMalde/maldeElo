@@ -1,6 +1,6 @@
 import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
 import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, type PropertyValueMap } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import type { PlayerModel } from './models/PlayerModel';
 
@@ -15,20 +15,25 @@ export class AllPlayersPageComponent extends LitElement {
 
     @property({type:Array}) public playerData:PlayerModel[] = [];
 
-    @query('es-grid') protected playerGridEl:EsGridCmp    
+    @query('es-grid') protected playerGridEl:EsGridCmp;
+
+    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        this.playerGridConfig.datasource = this.playerData;
+        this.playerGridEl?.configure(this.playerGridConfig);
+    }
 
     protected playerGridConfig:EsGrid.Configuration<PlayerModel> = {
         setup: {
             columns: [ 
                 {path:"name", label:"Name", pinned:true, pinnable: true},
-                {path:"elo", label:"Elo rating", width: 130},
-                {path:"bestelo", label:"Best Elo", width: 130},
-                {path:"worstelo", label:"Worst Elo", width: 130},
-                {path:"games", label:"#Games"},
-                {path:"winpercent", label:"Win %"},
                 {path:"rating", label:"Rating", width: 130},                
                 {path:"bestrating", label:"Best Rating", width: 130},                
                 {path:"worstrating", label:"Worst Rating", width: 130},
+                {path:"games", label:"#Games"},
+                {path:"winpercent", label:"Win %"},
+                {path:"elo", label:"Elo rating", width: 130},
+                {path:"bestelo", label:"Best Elo", width: 130},
+                {path:"worstelo", label:"Worst Elo", width: 130},                
                 {path:"scorepercent", label: "Avg Score %", width: 130}
             ],
             defaults: {
@@ -57,10 +62,14 @@ export class AllPlayersPageComponent extends LitElement {
         this.playerGridEl.configure(this.playerGridConfig);
     }
 
+    override updated(changed:any) {
+        super.updated(changed);
+        console.log(this.playerData);
+    }
+
 	override render() {
 		return html`
-        <es-button type="tonal">KULT</es-button>
-		<es-grid></es-grid>
+        <es-grid></es-grid>
         <!--
         <es-card class="card-overview">
             <img
