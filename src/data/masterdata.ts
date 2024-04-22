@@ -5,8 +5,8 @@ import { CalculateChanges, SetRanksAndPlayerStats } from "../utilities/eloServic
 
 
 
-export function InitializeGameData(gameData:GameRecord[], playerData:PlayerModel[], games:GameModel[]){
-    var rawGameData = [
+export function InitializeGameData(gameRecords:GameRecord[], playerData:PlayerModel[], games:GameModel[]){
+    /*var rawGameData = [
         {
             date: new Date(2022, 10, 11),
             game: games[0]!,
@@ -641,15 +641,59 @@ export function InitializeGameData(gameData:GameRecord[], playerData:PlayerModel
                 new ResultModel(playerData[3]!, 72), // leMalde
             ]
         },
+        {
+            date: new Date(2024, 3, 18),
+            game: games[14]!,
+            results: [
+                new ResultModel(playerData[20]!, 8), // Sven
+                new ResultModel(playerData[22]!, 10), // Sandnes
+                new ResultModel(playerData[21]!, 9), // King
+                new ResultModel(playerData[4]!, 11), // Gaute
+                new ResultModel(playerData[3]!, 12), // leMalde
+            ]
+        },
+        {
+            date: new Date(2024, 3, 18),
+            game: games[14]!,
+            results: [
+                new ResultModel(playerData[20]!, 7), // Sven
+                new ResultModel(playerData[22]!, 5), // Sandnes
+                new ResultModel(playerData[21]!, 12), // King
+                new ResultModel(playerData[4]!, 11), // Gaute
+                new ResultModel(playerData[3]!, 10), // leMalde
+                new ResultModel(playerData[26]!, 4), // Viken
+                new ResultModel(playerData[25]!, 6), // Stian
+                new ResultModel(playerData[24]!, 8), // Håvard
+                new ResultModel(playerData[23]!, 9), // Filip
+            ]
+        },
+        {
+            date: new Date(2024, 3, 18),
+            game: games[15]!,
+            results: [
+                new ResultModel(playerData[20]!, 100), // Sven
+                new ResultModel(playerData[21]!, 42), // King
+                new ResultModel(playerData[27]!, 50), // Ulland
+                new ResultModel(playerData[24]!, 59), // Håvard
+            ]
+        },
+        {
+            date: new Date(2024, 3, 18),
+            game: games[16]!,
+            results: [
+                new ResultModel(playerData[20]!, 95), // Sven
+                new ResultModel(playerData[21]!, 82), // King
+            ]
+        },
 
-    ];
+    ];*/
 
     playerData.forEach(ResetPlayerValues);
-    gameData.length = 0;
-    rawGameData.forEach(raw => {
+    // gameData.length = 0; DO I NEED THIS: gameRecords.length = 0
+    gameRecords.forEach(raw => {
         SetRanksAndPlayerStats(raw);
         raw.game.gamesCount++;
-        gameData.push(raw);
+        // gameData.push(raw);
     });
 }
 

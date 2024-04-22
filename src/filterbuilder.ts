@@ -1,6 +1,6 @@
 import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
 import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
-import { LitElement, html, type PropertyValueMap } from "lit";
+import { LitElement, html, type PropertyValueMap, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { GameModel } from "./models/GameModel";
 import { GridDatasource } from '@eyeshare/web-components/components';
@@ -14,13 +14,6 @@ export class FilterBuilderPageComponent extends LitElement {
     @property({type:Array}) public games:GameModel[] = [];
 
     @query('es-grid') protected gamesGridEl:EsGridCmp;
-
-    // protected mygames:GridDatasource<GameModel>;
-
-    /*protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        this.gamesGridConfig.datasource = this.games;
-        this.gamesGridEl?.configure(this.gamesGridConfig);
-    }*/
 
     protected gamesGridConfig:EsGrid.Configuration<GameModel, Context> = {
         context: () => ({testing: true, defSupplier: "leMalde"}),
@@ -63,11 +56,16 @@ export class FilterBuilderPageComponent extends LitElement {
         datasource: new GridDatasource<GameModel>(this.games)
     }
 
+    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        this.gamesGridConfig.datasource = this.games;
+        this.gamesGridEl?.configure(this.gamesGridConfig);
+        // this.gamesGridEl?.api.forceRender();
+    }
+
     override async connectedCallback() {
         super.connectedCallback();
         await this.updateComplete;
         this.gamesGridConfig.datasource = this.games;
-        console.log(this.gamesGridEl);
         this.gamesGridEl.configure(this.gamesGridConfig);
     }
 
@@ -118,19 +116,31 @@ export class FilterBuilderPageComponent extends LitElement {
 
     override render() {
 		return html`
-        <h1>Filter Builder</h1>
-        <es-button @click=${ () => this.applyFilter() } type="tonal">Apply</es-button>
-        <es-button @click=${ () => this.toggleBigGamesFilter() } type="tonal">Big games</es-button>
-        <es-button @click=${ () => this.toggleBigGamesBTSFilter() } type="tonal">Big games minus Beyond the Sun</es-button>
-        <es-button @click=${ () => this.toggleSmallGamesFilter() } type="tonal">Small games</es-button>
-        <es-button @click=${ () => this.toggleAll() } type="tonal">Toogle all</es-button>
-        <es-grid></es-grid>
-        
-		<es-form>
-            <!-- Various 'Input' elements -->
-        </es-form>
+        <section>
+            <h1>Filter Builder</h1>
+            <article>
+                <es-button @click=${ () => this.applyFilter() } type="tonal">Apply</es-button>
+                <es-button @click=${ () => this.toggleBigGamesFilter() } type="tonal">Big games</es-button>
+                <es-button @click=${ () => this.toggleBigGamesBTSFilter() } type="tonal">Big games minus Beyond the Sun</es-button>
+                <es-button @click=${ () => this.toggleSmallGamesFilter() } type="tonal">Small games</es-button>
+                <es-button @click=${ () => this.toggleAll() } type="tonal">Toogle all</es-button>
+            </article>
+            <es-grid></es-grid>
+            
+            <es-form>
+                <!-- Various 'Input' elements -->
+            </es-form>
+        </section>
 		`;
 	}
+
+    static override styles = css`
+        section {
+            display: grid;
+            grid-template-rows: max-content max-content 1fr;
+            overflow: hidden;
+        }   
+    `
 
     /*private handleClick(e: MouseEvent) {
         console.log("MyButton, click", e);

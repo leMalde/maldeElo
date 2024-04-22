@@ -1,8 +1,8 @@
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { PlayerModel, PostProcess } from './models/PlayerModel';
 import { GameModel } from './models/GameModel';
-import type { GameRecord } from './models/GameRecord';
+import { GameRecord, ResultModel } from './models/GameRecord';
 import { InitializeGameData, Recalculate } from './data/masterdata';
 import { CalculateChanges } from './utilities/eloService';
 import type { AllPlayersPageComponent } from './allplayers';
@@ -15,7 +15,7 @@ export class HelloWorldComponent extends LitElement {
 
 	@property({type: Array})
 	protected games:GameModel[] = [
-		new GameModel("Beyond the sun", true), // 0 
+		/*new GameModel("Beyond the sun", true), // 0 
         new GameModel("Dune (2020)", true), // 1
         new GameModel("Brass: Birmingham", true), // 2
         new GameModel("Puerto Rico", true), // 3
@@ -29,10 +29,13 @@ export class HelloWorldComponent extends LitElement {
 		new GameModel("Furnace"), // 11
 		new GameModel("Dune Uprising (2023)", true), // 12
 		new GameModel("Heat: Pedal to the metal"), // 13
+		new GameModel("Exploding kittens"), // 14
+		new GameModel("Hi-Lo"), // 15
+		new GameModel("6nimmt!"), // 16*/
 	];
 
 	protected playerData:PlayerModel[] = [
-        new PlayerModel("Espen"), // 0 
+        /*new PlayerModel("Espen"), // 0 
         new PlayerModel("Roen"), // 1
         new PlayerModel("Magga"), // 2
         new PlayerModel("leMalde"), // 3
@@ -52,6 +55,14 @@ export class HelloWorldComponent extends LitElement {
 		new PlayerModel("Atle"), // 17
 		new PlayerModel("Tonstad"), // 18
 		new PlayerModel("Henrik"), // 19
+		new PlayerModel("Sven"), // 20
+		new PlayerModel("King"), // 21
+		new PlayerModel("Sandnes"), // 22
+		new PlayerModel("Filip"), // 23
+		new PlayerModel("Håvard"), // 24
+		new PlayerModel("Stian"), // 25
+		new PlayerModel("Viken"), // 26
+		new PlayerModel("Ulland"), // 27*/
 	];
 
 	@property({type: Array})
@@ -80,13 +91,80 @@ export class HelloWorldComponent extends LitElement {
 		"Atle": new PlayerModel("Atle"),
 	};
 
+	private async fetchUsers(): Promise<PlayerModel[]> {	  
+		const res = await fetch('/elosystem/users.php', {
+			// learn more about this API here: https://graphql-pokemon2.vercel.app/
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json;charset=UTF-8',
+			},
+			// body: JSON.stringify({}),
+		});
+		const res_1 = await res.json();
+		return res_1.map((user: PlayerModel) => new PlayerModel(user.id, user.username, user.name));
+	}
+
+	private async fetchGames(): Promise<GameModel[]> {	  
+		const res = await fetch('/elosystem/games.php', {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json;charset=UTF-8',
+			},
+			// body: JSON.stringify({}),
+		});
+		const res_1 = await res.json();
+		return res_1.map((game: GameModel) => new GameModel(game.id, game.name, game.bigGame, game.gameType, game.gameMode, game.scoringType));
+	}
+
+	private async fetchRecords(users:PlayerModel[], games:GameModel[]): Promise<GameRecord[]> {	  
+		const res = await fetch('/elosystem/records.php', {
+			method: 'GET',
+			headers: {
+				'content-type': 'application/json;charset=UTF-8',
+			},
+			// body: JSON.stringify({}),
+		});
+		const res_1 = await res.json();
+		var records:GameRecord[] = [];
+
+		res_1.forEach((line: any) => {
+			if (records[line.id] === undefined){
+				records[line.id] = {
+					date: new Date(line.date),
+					game: games.find(g => g.id == line.game)!,
+					results: [
+						new ResultModel(users.find(p => p.id == line.userId)!, line.score, line.tiebreak)
+					]
+				}
+			}
+			else
+			{
+				records[line.id]!.results.push(new ResultModel(users.find(p => p.id == line.userId)!, line.score, line.tiebreak));
+			}
+		});
+
+		return records.filter(Boolean); // The stupid foreach above creates undefined elements 
+	}
+
 	override async connectedCallback() {
         super.connectedCallback();
-		
-        InitializeGameData(this.gameRecords, this.playerData, this.games);
 
-		this.games.forEach(g => {
-			const filteredRecords = this.gameRecords.filter(l => l.game.name === g.name);
+		const [users, games] = await Promise.all([
+			this.fetchUsers(),
+			this.fetchGames(),
+		]);
+
+		const gameRecords = await this.fetchRecords(users, games);
+
+        InitializeGameData(gameRecords, users, games); // needs to finish process before rendering children
+
+		/*this.playerData = users;
+		this.games = games;
+		this.gameRecords =  gameRecords; */
+		
+
+		games.forEach(g => {
+			const filteredRecords = gameRecords.filter(l => l.game.name === g.name);
 			var bestScore = 0;
 			var bestScoreNames:string[] = [];
 			filteredRecords.forEach(r => {
@@ -94,37 +172,43 @@ export class HelloWorldComponent extends LitElement {
 
 				if (r.results[0]!.score > bestScore){
 					bestScore = r.results[0]!.score;
-					bestScoreNames = [r.results[0]!.player.name];
+					bestScoreNames = [r.results[0]!.player.username];
 				}
 				else if (r.results[0]!.score === bestScore){
-					bestScoreNames.push(r.results[0]!.player.name);
+					bestScoreNames.push(r.results[0]!.player.username);
 				}
 
 			});
 
 			g.avgWinningScore = Math.round(g.avgWinningScore / filteredRecords.length);
 
-			Recalculate(filteredRecords, this.playerData);
-			this.playerData.forEach(player => {
+			Recalculate(filteredRecords, users);
+			users.forEach(player => {
 				// this.filteredPlayerData.push(player);
 				player.scorepercent = Math.round(100 * player.scorepercent / player.games) / 100;
 				player.winpercent = Math.round(100 * 100 * player.winpercent / player.games) / 100;
 			});
-			const bestEloPlayer = this.playerData.sort((a,b) => b.elo - a.elo || this.gamesCountSort(a,b,g.name))[0];
-			g.bestEloPlayer = bestEloPlayer!.name + " (" + bestEloPlayer!.elo + ")";
-			const bestRatedPlayer = this.playerData.sort((a,b) => b.rating - a.rating || this.gamesCountSort(a,b,g.name))[0];
-			g.bestRatingPlayer = bestRatedPlayer!.name + " (" + bestRatedPlayer!.rating + ")";
+			const bestEloPlayer = users.sort((a,b) => b.elo - a.elo || this.gamesCountSort(a,b,g.name))[0];
+			g.bestEloPlayer = bestEloPlayer!.username + " (" + bestEloPlayer!.elo + ")";
+			const bestRatedPlayer = users.sort((a,b) => b.rating - a.rating || this.gamesCountSort(a,b,g.name))[0];
+			g.bestRatingPlayer = bestRatedPlayer!.username + " (" + bestRatedPlayer!.rating + ")";
 			g.bestWinningScore = bestScore + " (" + bestScoreNames.join(', ') + ")";
-		})
+		});
 
-		Recalculate(this.gameRecords, this.playerData);
+		/*Recalculate(gameRecords, users);
+
         // this.gameRecords.forEach(CalculateChanges);
-        this.playerData.forEach(player => {
+        users.forEach(player => {
 			this.filteredPlayerData.push(player);
             player.scorepercent = Math.round(100 * player.scorepercent / player.games) / 100;
             player.winpercent = Math.round(100 * 100 * player.winpercent / player.games) / 100;
         });
-		this.filteredPlayerData.sort((a,b) => b.rating - a.rating);
+		this.filteredPlayerData.sort((a,b) => b.rating - a.rating);*/
+
+		this.playerData = users;
+		this.games = games;
+		this.gameRecords =  gameRecords;
+		this.applyFilter();
     }
 
 	private gamesCountSort(a:PlayerModel, b:PlayerModel, game:string){
@@ -152,15 +236,30 @@ export class HelloWorldComponent extends LitElement {
 		return 0;
 	}
 
+	private applyFilter(){
+		const filtered:PlayerModel[] = [];
+		Recalculate(this.gameRecords, this.playerData);
+		this.playerData.forEach(player => {
+			if (player.games > 0){
+				PostProcess(player);
+				filtered.push(player)
+			}
+		});
+		this.filteredPlayerData = filtered;
+		this.filteredPlayerData.sort((a,b) => b.rating - a.rating);
+	}
+
 	override render() {
 		return html`
+		<lem-navheader></lem-navheader>
 		<es-tab-group>
 			<es-tab slot="nav" panel="leaderboard">Leaderboard</es-tab>
-			<es-tab slot="nav" panel="history">Game History</es-tab>
-			<es-tab disabled slot="nav" panel="addgame">Add Game</es-tab>
 			<es-tab slot="nav" panel="filterbuilder">Filter Builder</es-tab>
+			<es-tab slot="nav" panel="history">Game History</es-tab>
+			<es-tab slot="nav" panel="recordgame">Record Game</es-tab>
+			<es-tab slot="nav" panel="addplayer">Add Player</es-tab>
+			<es-tab slot="nav" panel="addgame">Add Game</es-tab>
 			<es-tab slot="nav" panel="profiles">Profiles</es-tab>
-
 
 			<es-tab-panel name="leaderboard">
 				<lem-allplayers .playerData=${this.filteredPlayerData} @myClick=${this.applyFilter}></lem-allplayers>
@@ -168,43 +267,143 @@ export class HelloWorldComponent extends LitElement {
 			<es-tab-panel name="history">
 				<lem-allgames .gameRecords=${this.gameRecords}></lem-allgames>
 			</es-tab-panel>
+			<es-tab-panel name="recordgame">
+				<section>
+					<article>
+						<lem-recordgame></lem-recordgame>
+					</article>
+				</section>
+			</es-tab-panel>
+			<es-tab-panel name="addplayer">
+				<section>
+					<article>
+						<lem-addplayer></lem-addplayer>
+					</article>
+				</section>
+			</es-tab-panel>
 			<es-tab-panel name="addgame">
-				<lem-allplayers .playerData=${this.playerData}></lem-allplayers>
+				<section>
+					<article>
+						<lem-addgame></lem-addgame>
+					</article>
+				</section>
 			</es-tab-panel>
 			<es-tab-panel name="filterbuilder">
 				<lem-filterbuilder .games=${this.games} @myClick=${this.applyFilter}></lem-filterbuilder>
 			</es-tab-panel>
-			<es-tab-panel name="profiles">				
-				${repeat(
-					this.playerData,
-					(player) => html`<lem-playercard .playerModel=${player}></lem-playercard>`
-				)}
+			<es-tab-panel name="profiles">
+				<section>
+					<article>
+						${repeat(
+							this.playerData,
+							(player) => html`<lem-playercard .playerModel=${player}></lem-playercard>`
+						)}
+					</article>
+				</section>
 			</es-tab-panel>
 		</es-tab-group>
 		`;
 	}
 
-	/*private refreshGames(){
-		const newGames:GameModel[] = [];
-		this.games.forEach(g => {
-			newGames.push(g);
-		});
-		this.games = newGames;
-	}*/
+	static override styles = css`
+		:host {
+			display: grid;
+			overflow: hidden;
+			grid-template-rows: max-content 1fr;
+		}
+		es-tab-group {
+			display: grid;
+			overflow: hidden;
+		}
+		es-tab-group::part(base),
+		es-tab-group::part(body) {
+			overflow: hidden;
+		}
+		es-tab-panel::part(base) {
+			display: grid;
+		}
+		es-tab-panel > *  {
+			display: contents;
+		}
 
-	private applyFilter(){
-		const filtered:PlayerModel[] = [];
-		Recalculate(this.gameRecords, this.playerData);
-		this.playerData.forEach(player => {
-			if (player.games > 0){
-				PostProcess(player);
-				console.log("Add " + player.name);
-				filtered.push(player)
-			}
-		});
-		this.filteredPlayerData = filtered;
-		this.filteredPlayerData.sort((a,b) => b.rating - a.rating);
-	}
+		/*body {
+			margin: 0;
+			background: #222;
+			font-family: 'Work Sans', sans-serif;
+			font-weight: 800;
+		}*/
+
+		es-legend::part(input-base) {
+			background: blanchedalmond;
+		}
+
+		.container {
+			width: 80%;
+			margin: 0 auto;
+		}
+
+		header {
+			background: #55d6aa;
+			// background: var(--esd-surface5);
+		}
+
+		header::after {
+		content: '';
+		display: table;
+		clear: both;
+		}
+
+		.logo {
+		float: left;
+		padding: 10px 0;
+		}
+
+		nav {
+		float: right;
+		}
+
+		nav ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		}
+
+		nav li {
+		display: inline-block;
+		margin-left: 70px;
+		padding-top: 23px;
+
+		position: relative;
+		}
+
+		nav a {
+		color: #444;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 14px;
+		}
+
+		nav a:hover {
+		color: #000;
+		}
+
+		nav a::before {
+		content: '';
+		display: block;
+		height: 5px;
+		background-color: #444;
+
+		position: absolute;
+		top: 0;
+		width: 0%;
+
+		transition: all ease-in-out 250ms;
+		}
+
+		nav a:hover::before {
+		width: 100%;
+		}
+	`
 }
 /*
 @customElement( 'malde-es-grid' )

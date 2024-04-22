@@ -2,5 +2,14 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig( {
-    base: '/elo/'
+    base: '/elo/',
+    server: {
+        proxy: {
+            "/elosystem": {
+                changeOrigin: true,
+                target: "http://localhost:80",
+                secure: false
+            }
+        }
+    }
 } );

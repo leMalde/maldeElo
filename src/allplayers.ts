@@ -20,12 +20,13 @@ export class AllPlayersPageComponent extends LitElement {
     protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         this.playerGridConfig.datasource = this.playerData;
         this.playerGridEl?.configure(this.playerGridConfig);
+        // this.playerGridEl?.api.forceRender();
     }
 
     protected playerGridConfig:EsGrid.Configuration<PlayerModel> = {
         setup: {
             columns: [ 
-                {path:"name", label:"Name", pinned:true, pinnable: true},
+                {path:"username", label:"Name", pinned:true, pinnable: true},
                 {path:"rating", label:"Rating", width: 130},                
                 {path:"bestrating", label:"Best Rating", width: 130},                
                 {path:"worstrating", label:"Worst Rating", width: 130},
@@ -58,14 +59,16 @@ export class AllPlayersPageComponent extends LitElement {
         super.connectedCallback();
         await this.updateComplete;
         this.playerGridConfig.datasource = this.playerData;
-        console.log(this.playerGridEl);
         this.playerGridEl.configure(this.playerGridConfig);
     }
 
-    override updated(changed:any) {
+    /*override updated(changed:any) {
         super.updated(changed);
         console.log(this.playerData);
-    }
+        this.playerGridConfig.datasource = this.playerData;
+        this.playerGridEl?.configure(this.playerGridConfig);
+        this.playerGridEl?.api.forceRender();
+    }*/
 
 	override render() {
 		return html`

@@ -78,9 +78,9 @@ export function SetRanksAndPlayerStats(gameRecord:GameRecord){
                 continue;
 
             if (i < j)
-                AddOrIncrease(results[i]!.player.opponentswins, results[j]!.player.name);
+                AddOrIncrease(results[i]!.player.opponentswins, results[j]!.player.username);
             else
-                AddOrIncrease(results[i]!.player.opponentslosses, results[j]!.player.name);
+                AddOrIncrease(results[i]!.player.opponentslosses, results[j]!.player.username);
             
         }
 

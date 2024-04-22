@@ -4,3 +4,6 @@ import './allplayers.js';
 import './allgames.js';
 import './filterbuilder.js';
 import './playercard.js';
+import './addgameform.js';
+import './addplayerform.js';
+import './navheader.js';

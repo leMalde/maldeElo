@@ -6,20 +6,16 @@ import type { Use } from "@eyeshare/shared";
 import { repeat } from "lit/directives/repeat.js";
 import type { EsAlertCmp } from "@eyeshare/web-components/components";
 import { when } from "lit/directives/when.js";
-import { GameMode, GameType, type ScoringType } from "./models/GameModel";
 
 class NewPlayer {
     name: string;
-    bigGame: boolean;
-    gameType: GameType;
-    gameMode: GameMode;
-    scoringType: ScoringType;
+    username: string;
 }
 
 const configure = configureFields<NewPlayer, {testing: boolean}>();
 
-@customElement( 'lem-addgame' )
-export class AllGamesPageComponent extends LitElement {
+@customElement( 'lem-addplayer' )
+export class AddPlayerPageComponent extends LitElement {
     
     @query("es-alert") protected esAlertEl:EsAlertCmp
 
@@ -41,28 +37,17 @@ export class AllGamesPageComponent extends LitElement {
             maxlength: 45,
 
 		}),
-        BigGame: configure.switch('bigGame', {
-            label: 'Big game',
+        Username: configure.text('username', {
+            label: 'Username',
+            placeholder: "username",
+            minlength: 3,
+            maxlength: 15
 		}),
-        GameType: configure.text('gameType', {
-            label: 'Game type'
-        }),
-        GameMode: configure.text('gameMode', {
-            label: 'Game mode'
-        }),
-        ScoringType: configure.radiogroup('scoringType', {
-            options: [],
-            helpText: "HELP",
-            label: "LABEL"
-        }),
 	} as const;
 
     protected fieldUse: Use<typeof this.fieldCat> = {
-        Name: 100,
-        BigGame: 110,
-        GameType: 120,
-        GameMode: 130,
-        ScoringType: false,
+        Username: 100,
+        Name: 110,
 	};
 
     protected formFields = fieldCatalogToFormFields(this.fieldCat, this.fieldUse);
@@ -73,7 +58,7 @@ export class AllGamesPageComponent extends LitElement {
         await this.updateComplete;
     }
 
-    async addGame(){
+    async addPlayer(){
         var nameRegex = /^[\wæøå -]{3,45}$/i;
         if (!this.newPlayerForm.name || !nameRegex.test(this.newPlayerForm.name)) {
             this.showAlert = true;
@@ -90,7 +75,7 @@ export class AllGamesPageComponent extends LitElement {
         console.log("Submit new player!");
         console.log(this.newPlayerForm);
 
-        const response = await fetch('/elosystem/addGame.php', {
+        const response = await fetch('/elosystem/addPlayer.php', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -131,7 +116,7 @@ export class AllGamesPageComponent extends LitElement {
     override render() {
 		return html`
         <es-card class="card-overview">
-            <strong>Add new game</strong>
+            <strong>Add new player</strong>
             <es-form disableFormStyling>
                 ${ repeat(
                         this.formFields,
@@ -150,7 +135,7 @@ export class AllGamesPageComponent extends LitElement {
                         }),
                     ) }
             </es-form>
-            <es-button @click=${ () => this.addGame() } type="tonal">Add player</es-button>
+            <es-button @click=${ () => this.addPlayer() } type="tonal">Add player</es-button>
             ${when(this.showAlert,  ()  => html`
                 <es-alert
                     class="alert-closable"

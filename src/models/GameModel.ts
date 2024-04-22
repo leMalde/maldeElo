@@ -3,21 +3,19 @@ import type { CheckableElement } from "@eyeshare/web-components/mixins";
 import type { GameRecord } from "./GameRecord";
 
 export class GameModel {
-    scoringType: ScoringType = "MostPoints";
-    gameMode: GameMode = "FFA";
     gamesCount: number = 0;
     include: boolean = true;
     bestEloPlayer: string = "";
     bestRatingPlayer: string = "";
     avgWinningScore: number = 0;
     bestWinningScore: string = "";
+    // gameType: GameType;
     /*exclude: CheckableElement;
     howtoswitch: CheckableField;*/
     // results?: ResultModel[];
 
-    constructor(public name: string, public bigGame: boolean = false, public gameType: GameType = "BoardGame"){
-        this.gameMode = "FFA";
-        this.scoringType = "MostPoints";
+    constructor(public readonly id:number, public name:string, public bigGame:boolean, public gameType:GameType, public gameMode:GameMode, public scoringType:ScoringType){
+        // this.gameType = gameTypeInt;
     };
 }
 
@@ -32,8 +30,20 @@ export function findBestPlayer(game:GameModel, records:GameRecord){
     elochange: number;
 }*/
 
-type GameType = "BoardGame"|"Gaming"|"Sport";
+export enum GameType {
+    "Board game",
+    "Gaming",
+    "Sport"
+}
 
-type ScoringType = "MostPoints"|"LeastPoints";
+// = "BoardGame"|"Gaming"|"Sport";
 
-type GameMode = "FFA"|"Team";
+export enum ScoringType { 
+    "MostPoints",
+    "LeastPoints"
+}
+
+export enum GameMode {
+    "FFA",
+    "Team"
+}

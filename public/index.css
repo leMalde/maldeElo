@@ -13,9 +13,11 @@ body {
     display: grid;
     padding: 0;
     margin: 0;
-    min-height: 100vh;
+    grid-template-rows: 100dvh;
+    grid-template-columns: 100dvw;
     color: var(--esd-on-surface);
     background-color: var(--esd-background);
+    overflow: hidden;
 }
 
 .listRow.even {

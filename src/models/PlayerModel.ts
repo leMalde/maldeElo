@@ -12,7 +12,7 @@ export class PlayerModel {
     opponentswins: Record<string, number> = {}
     opponentslosses: Record<string, number> = {}
 
-    constructor(public name:PlayerNames){};
+    constructor(public readonly id:number,public readonly username:string, public name:string){};
 }
 
 export function AddOrIncrease(record: Record<string, number>, key: string){
@@ -39,4 +39,5 @@ export function ResetPlayerValues(player:PlayerModel){
     player.winpercent = 0.00;
 }
 
-type PlayerNames = "Espen"|"Roen"|"Magga"|"leMalde"|"Gaute"|"Katrine"|"Simen"|"Nora"|"Jostein"|"Elisa"|"Steini"|"Marita"|"Marius"|"Maren"|"Nobody"|"Rohan"|"Trippo"|"Atle"|"Tonstad"|"Henrik";
+type PlayerNames = "Espen"|"Roen"|"Magga"|"leMalde"|"Gaute"|"Katrine"|"Simen"|"Nora"|"Jostein"|"Elisa"|"Steini"|"Marita"|"Marius"|"Maren"|"Nobody"|"Rohan"|"Trippo"|"Atle"|"Tonstad"|"Henrik"|"Sven"
+|"King"|"Sandnes"|"Filip"|"Håvard"|"Stian"|"Viken"|"Ulland";

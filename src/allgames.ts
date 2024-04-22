@@ -1,6 +1,6 @@
 import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
 import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ResultModel, type GameRecord } from './models/GameRecord';
 import { map } from 'lit/directives/map.js';
@@ -34,7 +34,7 @@ export class AllGamesPageComponent extends LitElement {
                 configure.date("date", {label:"Dato"}), 
                 // {path:"date", label:"Date", pinned:false, pinnable: true},
                 {path:"game.name", label:"Game", minWidth: 160},
-                {path:"winner.name", label:"Winner", minWidth: 140},
+                {path:"winner.username", label:"Winner", minWidth: 140},
                 {path:"game.gameType", label:"GameType"},
                 {path:"game.gameMode", label:"GameMode"},
             ],
@@ -95,7 +95,7 @@ export class AllGamesPageComponent extends LitElement {
 										${ result.rank }
 									</div>
                                     <div class="field">
-										${ result.player.name }
+										${ result.player.username }
 									</div>
                                     <div class="field">
 										${ result.score }
@@ -142,6 +142,12 @@ export class AllGamesPageComponent extends LitElement {
         this.gameGridEl.configure(this.gameGridConfig);
     }
 
+    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        this.gameGridConfig.datasource = this.gameRecords;
+        this.gameGridEl?.configure(this.gameGridConfig);
+        // this.playerGridEl?.api.forceRender();
+    }
+
     /*protected saveGameRecords = () => {
         try {
             // Connect the client to the server	(optional starting in v4.7)
@@ -161,4 +167,10 @@ export class AllGamesPageComponent extends LitElement {
 		<es-grid></es-grid>
 		`;
 	}
+
+    static override styles = css`
+		:host {
+			display: contents;
+		}
+	`
 }
