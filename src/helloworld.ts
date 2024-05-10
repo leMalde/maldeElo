@@ -4,13 +4,15 @@ import { PlayerModel, PostProcess } from './models/PlayerModel';
 import { GameModel } from './models/GameModel';
 import { GameRecord, ResultModel } from './models/GameRecord';
 import { InitializeGameData, Recalculate } from './data/masterdata';
-import { CalculateChanges } from './utilities/eloService';
+import { translationFiles } from '@eyeshare/web-components/translations';
+import { translationLoader } from '@eyeshare/web-components/utilities';
 import type { AllPlayersPageComponent } from './allplayers';
 import { repeat } from 'lit/directives/repeat.js';
 
+translationLoader(translationFiles);
+
 @customElement( 'malde-helloworld' )
 export class HelloWorldComponent extends LitElement {
-
 	@query('lem-allplayers') protected playerDataEl:AllPlayersPageComponent
 
 	@property({type: Array})
@@ -113,7 +115,7 @@ export class HelloWorldComponent extends LitElement {
 			// body: JSON.stringify({}),
 		});
 		const res_1 = await res.json();
-		return res_1.map((game: GameModel) => new GameModel(game.id, game.name, game.bigGame, game.gameType, game.gameMode, game.scoringType));
+		return res_1.map((game:any) => new GameModel(game.id, game.name, game.bigGame, game.gameType, game.gameMode, game.scoringType));
 	}
 
 	private async fetchRecords(users:PlayerModel[], games:GameModel[]): Promise<GameRecord[]> {	  
@@ -189,9 +191,9 @@ export class HelloWorldComponent extends LitElement {
 				player.winpercent = Math.round(100 * 100 * player.winpercent / player.games) / 100;
 			});
 			const bestEloPlayer = users.sort((a,b) => b.elo - a.elo || this.gamesCountSort(a,b,g.name))[0];
-			g.bestEloPlayer = bestEloPlayer!.username + " (" + bestEloPlayer!.elo + ")";
+			g.bestEloPlayer = bestEloPlayer!.elo + " (" + bestEloPlayer!.username + ")";
 			const bestRatedPlayer = users.sort((a,b) => b.rating - a.rating || this.gamesCountSort(a,b,g.name))[0];
-			g.bestRatingPlayer = bestRatedPlayer!.username + " (" + bestRatedPlayer!.rating + ")";
+			g.bestRatingPlayer = bestRatedPlayer!.rating + " (" + bestRatedPlayer!.username + ")";
 			g.bestWinningScore = bestScore + " (" + bestScoreNames.join(', ') + ")";
 		});
 
@@ -270,7 +272,7 @@ export class HelloWorldComponent extends LitElement {
 			<es-tab-panel name="recordgame">
 				<section>
 					<article>
-						<lem-recordgame></lem-recordgame>
+						<lem-recordgame .games=${this.games} .players=${this.playerData}></lem-recordgame>
 					</article>
 				</section>
 			</es-tab-panel>

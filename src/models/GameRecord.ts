@@ -19,6 +19,12 @@ export class ResultModel {
     constructor(public player: PlayerModel, public score: number, public tiebreak: number = 0){}
 }
 
+export class RecordScore {
+    player?: PlayerModel;
+    score?: number;
+    tiebreak?: number;
+}
+
 export function ResetResultValues(result:ResultModel){
     result.elochange = 0;
     result.ratingchange = 0;

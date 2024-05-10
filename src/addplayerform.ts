@@ -32,14 +32,14 @@ export class AddPlayerPageComponent extends LitElement {
     protected fieldCat = {		
         Name: configure.text('name', {
             label: 'Full name',
-            placeholder: "I'm a loser",
+            placeholder: "Full name",
             minlength: 3,
             maxlength: 45,
 
 		}),
         Username: configure.text('username', {
             label: 'Username',
-            placeholder: "username",
+            placeholder: "Username",
             minlength: 3,
             maxlength: 15
 		}),
@@ -73,7 +73,6 @@ export class AddPlayerPageComponent extends LitElement {
             return;
         }
         console.log("Submit new player!");
-        console.log(this.newPlayerForm);
 
         const response = await fetch('/elosystem/addPlayer.php', {
 			method: 'POST',
@@ -86,8 +85,6 @@ export class AddPlayerPageComponent extends LitElement {
                 "username": this.newPlayerForm.username
             }),
 		});
-
-        console.log(response);
 
         if (!response.ok){
             this.showAlert = true;

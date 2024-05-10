@@ -9,8 +9,6 @@ export class NavHeaderComponent extends LitElement {
     @query("#password") protected PasswordEl:EsInputCmp
 
     async login(){
-        console.log(this.UsernameEl.value);
-        console.log(this.PasswordEl.value);
         var nameRegex = /^[\w]{3,15}$/i;
         if (!this.PasswordEl.value || !nameRegex.test(this.PasswordEl.value)) {
             // this.showAlert = true;
@@ -36,8 +34,6 @@ export class NavHeaderComponent extends LitElement {
                 "username": this.UsernameEl.value
             }),
 		});
-
-        console.log(response);
     }
     
     override render() {

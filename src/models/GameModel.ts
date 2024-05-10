@@ -9,13 +9,19 @@ export class GameModel {
     bestRatingPlayer: string = "";
     avgWinningScore: number = 0;
     bestWinningScore: string = "";
+    gameType: string = "";
+    gameMode: string = "";
+    scoringType: string = "";
     // gameType: GameType;
     /*exclude: CheckableElement;
     howtoswitch: CheckableField;*/
     // results?: ResultModel[];
 
-    constructor(public readonly id:number, public name:string, public bigGame:boolean, public gameType:GameType, public gameMode:GameMode, public scoringType:ScoringType){
+    constructor(public readonly id:number, public name:string, public bigGame:boolean, public gameTypeInt:GameType, public gameModeInt:GameMode, public scoringTypeInt:ScoringType){
         // this.gameType = gameTypeInt;
+        this.gameType = GameType[gameTypeInt]
+        this.gameMode = GameMode[gameModeInt]
+        this.scoringType = ScoringType[scoringTypeInt]
     };
 }
 

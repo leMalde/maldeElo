@@ -1,25 +1,25 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { configureFields, fieldCatalogToFormFields } from '@eyeshare/web-components/concepts';
+import { configureFields, fieldCatalogToFormFields, type Code } from '@eyeshare/web-components/concepts';
 import { LocalizeController } from '@eyeshare/web-components/controllers';
 import type { Use } from "@eyeshare/shared";
 import { repeat } from "lit/directives/repeat.js";
 import type { EsAlertCmp } from "@eyeshare/web-components/components";
 import { when } from "lit/directives/when.js";
-import { GameMode, GameType, type ScoringType } from "./models/GameModel";
+import { GameMode, GameType, ScoringType } from "./models/GameModel";
 
-class NewPlayer {
-    name: string;
+class NewGame {
+    name?: string;
     bigGame: boolean;
-    gameType: GameType;
-    gameMode: GameMode;
-    scoringType: ScoringType;
+    gameType: Code;
+    gameMode: Code;
+    scoringType: Code;
 }
 
-const configure = configureFields<NewPlayer, {testing: boolean}>();
+const configure = configureFields<NewGame, {testing: boolean}>();
 
 @customElement( 'lem-addgame' )
-export class AllGamesPageComponent extends LitElement {
+export class AddGamePageComponent extends LitElement {
     
     @query("es-alert") protected esAlertEl:EsAlertCmp
 
@@ -31,12 +31,26 @@ export class AllGamesPageComponent extends LitElement {
 
     protected readonly localize = new LocalizeController({ host: this });
 
-    protected newPlayerForm: NewPlayer = new NewPlayer;
+    protected newGameForm: NewGame = {
+        bigGame: true,
+        gameType: {
+            Key: GameType[0]!,
+            Description: GameType[0]!.toString()
+        },
+        gameMode: {
+            Key: GameMode[0]!,
+            Description: GameMode[0]!.toString()
+        },
+        scoringType: {
+            Key: ScoringType[0]!,
+            Description: ScoringType[0]!.toString()
+        }
+    };
 
     protected fieldCat = {		
         Name: configure.text('name', {
             label: 'Full name',
-            placeholder: "I'm a loser",
+            placeholder: "Name",
             minlength: 3,
             maxlength: 45,
 
@@ -44,16 +58,57 @@ export class AllGamesPageComponent extends LitElement {
         BigGame: configure.switch('bigGame', {
             label: 'Big game',
 		}),
-        GameType: configure.text('gameType', {
-            label: 'Game type'
+        GameType: configure.typeaheadPick('gameType', {
+            label: 'Game type',
+            props: [ "Key" ],
+            datasource: {
+                list: [
+                    {
+                        Key: GameType[0]!,
+                        Description: GameType[0]!.toString()
+                    },
+                    {
+                        Key: GameType[1]!,
+                        Description: GameType[1]!.toString()
+                    },
+                    {
+                        Key: GameType[2]!,
+                        Description: GameType[2]!.toString()
+                    },
+                ]
+            }
         }),
-        GameMode: configure.text('gameMode', {
-            label: 'Game mode'
+        GameMode: configure.typeaheadPick('gameMode', {
+            label: 'Game mode',
+            props: [ "Key" ],
+            datasource: {
+                list: [
+                    {
+                        Key: GameMode[0]!,
+                        Description: GameMode[0]!.toString()
+                    },
+                    {
+                        Key: GameMode[1]!,
+                        Description: GameMode[1]!.toString()
+                    },
+                ]
+            }
         }),
-        ScoringType: configure.radiogroup('scoringType', {
-            options: [],
-            helpText: "HELP",
-            label: "LABEL"
+        ScoringType: configure.typeaheadPick('scoringType', {
+            label: 'Scoring type',
+            props: [ "Key" ],
+            datasource: {
+                list: [
+                    {
+                        Key: ScoringType[0]!,
+                        Description: ScoringType[0]!.toString()
+                    },
+                    {
+                        Key: ScoringType[1]!,
+                        Description: ScoringType[1]!.toString()
+                    },
+                ]
+            }
         }),
 	} as const;
 
@@ -62,33 +117,25 @@ export class AllGamesPageComponent extends LitElement {
         BigGame: 110,
         GameType: 120,
         GameMode: 130,
-        ScoringType: false,
+        ScoringType: 140,
 	};
 
     protected formFields = fieldCatalogToFormFields(this.fieldCat, this.fieldUse);
 
     override async connectedCallback() {
         super.connectedCallback();
-
         await this.updateComplete;
     }
 
     async addGame(){
-        var nameRegex = /^[\wæøå -]{3,45}$/i;
-        if (!this.newPlayerForm.name || !nameRegex.test(this.newPlayerForm.name)) {
+        var nameRegex = /^[\wæøå -():!?]{3,45}$/i;
+        if (!this.newGameForm.name || !nameRegex.test(this.newGameForm.name)) {
             this.showAlert = true;
-            this.alertMessage = "Invalid full name";
+            this.alertMessage = "Invalid name";
             return;
         }
 
-        var usernameRegex = /^[a-zA-Z]{3,15}$/;
-        if (!this.newPlayerForm.username || !usernameRegex.test(this.newPlayerForm.username)) {
-            this.showAlert = true;
-            this.alertMessage = "Invalid username";
-            return;
-        }
-        console.log("Submit new player!");
-        console.log(this.newPlayerForm);
+        console.log("Submit new game!");
 
         const response = await fetch('/elosystem/addGame.php', {
 			method: 'POST',
@@ -97,12 +144,13 @@ export class AllGamesPageComponent extends LitElement {
                 'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-                "name": this.newPlayerForm.name,
-                "username": this.newPlayerForm.username
+                "name": this.newGameForm.name,
+                "bigGame": this.newGameForm.bigGame,
+                "gameType": GameType[this.newGameForm.gameType.Key as keyof typeof GameType],
+                "gameMode": GameMode[this.newGameForm.gameMode.Key as keyof typeof GameMode],
+                "scoringType": ScoringType[this.newGameForm.scoringType.Key as keyof typeof ScoringType],
             }),
 		});
-
-        console.log(response);
 
         if (!response.ok){
             this.showAlert = true;
@@ -138,19 +186,19 @@ export class AllGamesPageComponent extends LitElement {
                         ({ name }) => name,
                         ({ render }) => render.editor({
                             context:  () => this.context,
-                            model:    this.newPlayerForm,
+                            model:    this.newGameForm,
                             localize: this.localize,
                             settings: {
                                 mode:                 'form',
                                 bare:                 'always',
-                                justify:              'end',
+                                justify:              'start',
                                 suppressHelpText:     true,
                                 suppressErrorMessage: false,
                             },
                         }),
                     ) }
             </es-form>
-            <es-button @click=${ () => this.addGame() } type="tonal">Add player</es-button>
+            <es-button @click=${ () => this.addGame() } type="tonal">Add game</es-button>
             ${when(this.showAlert,  ()  => html`
                 <es-alert
                     class="alert-closable"

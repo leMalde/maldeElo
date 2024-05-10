@@ -135,7 +135,6 @@ export class AllGamesPageComponent extends LitElement {
 
         await this.updateComplete;
 
-        console.log(this.gameGridEl);
         this.gameGridConfig.datasource = this.gameRecords;
         // this.gameRecords.forEach(CalculateChanges);
 
