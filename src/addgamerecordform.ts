@@ -189,33 +189,19 @@ export class RecordGamePageComponent extends LitElement {
         this.showAlert = false;
         // setTimeout(() => (alert && (this.showAlert = false)),0);
     };
-    /*
-    public increment(ev: Event) {
-		const numberEl = queryEventPath<EsNumberCmp>(ev, 'es-number')!;
-		numberEl.value++;
-        if (numberEl.value > +numberEl.max!){
-            numberEl.value = +numberEl.max!;
-        }
+    
+    autoFill(){
+        this.recordGameForm.numberofplayers = 4;
+        this.esFormEl.requestUpdate();
 
-        while(this.scoreRecords.length < numberEl.value){
-            this.scoreRecords.push({});
-        }
-        this.requestUpdate("scoreRecords");
-	}
+        this.scoreRecords = [
+            { player : this.players.find(p => p.username == 'Espen') },
+            { player : this.players.find(p => p.username == 'Roen') },
+            { player : this.players.find(p => p.username == 'Magga') },
+            { player : this.players.find(p => p.username == 'leMalde') },
+        ];
+    }
 
-	public decrement(ev: Event) {
-		const numberEl = queryEventPath<EsNumberCmp>(ev, 'es-number')!;
-		numberEl.value--;
-        if (numberEl.value < +numberEl.min!){
-            numberEl.value = +numberEl.min!;
-        }
-
-        while(this.scoreRecords.length > numberEl.value){
-            this.scoreRecords.pop();
-        }
-        this.requestUpdate("scoreRecords");
-	}
-    */
     protected handleFormChange(){
         if (this.recordGameForm.numberofplayers === this.scoreRecords.length || this.recordGameForm.numberofplayers < 2 || this.recordGameForm.numberofplayers > 25)
             return;
@@ -275,6 +261,7 @@ export class RecordGamePageComponent extends LitElement {
             ${ repeat(this.scoreRecords, (scoreRecord, index) => html`
                             <lem-playerscore .players=${this.players} .recordScore=${scoreRecord}></lem-playerscore>
                             ` ) }
+            <es-button @click=${ () => this.autoFill() } type="tonal">Geeks</es-button>
             <es-button @click=${ () => this.addGame() } type="tonal">Record game result</es-button>
 
             ${when(this.showAlert,  ()  => html`

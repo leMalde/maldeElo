@@ -327,6 +327,9 @@ export class HelloWorldComponent extends LitElement {
 		es-tab-panel > *  {
 			display: contents;
 		}
+		article {
+			overflow-y: auto;
+		}
 
 		/*body {
 			margin: 0;

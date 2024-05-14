@@ -1,5 +1,5 @@
 import { LitElement, css, html, type PropertyValueMap } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { PlayerModel } from "./models/PlayerModel";
 import { EsNumberCmp, EsTypeahead, EsTypeaheadCmp } from "@eyeshare/web-components/components";
 import type { TypeaheadField } from "@eyeshare/web-components/concepts";
@@ -8,7 +8,9 @@ import type { RecordScore } from "./models/GameRecord";
 
 @customElement( 'lem-playerscore' )
 export class PlayerScoreComponent extends LitElement {
-    
+   
+    @query('es-typeahead') protected typeaheadEl:EsTypeaheadCmp<PlayerModel>
+
     @property({type:Array}) public players:PlayerModel[] = [];
     @property({type:Object}) public recordScore:RecordScore;
 
@@ -24,10 +26,20 @@ export class PlayerScoreComponent extends LitElement {
         transform: EsTypeahead.identityTransform<PlayerModel>()
     }
 
+    override async connectedCallback() {
+        super.connectedCallback();
+        await this.updateComplete;
+        if (this.typeaheadEl && this.recordScore && this.recordScore.player)
+            this.typeaheadEl.value = this.recordScore.player!;
+    }
+
     protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         this._config.datasource = {
             list: this.players,
         }
+
+        if (this.typeaheadEl && this.recordScore && this.recordScore.player)
+            this.typeaheadEl.value = this.recordScore.player!;
     }
 
     override render() {
