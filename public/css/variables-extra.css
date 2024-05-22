@@ -1,11 +1,11 @@
 /**
  * Additional css tokens not from design system.
  */
-:root {
+ :root {
 	/* outline used in place of outline-decoration-secondary-gradient as the one in the design is a gradient and borders do not support this. */
 	--esx-panel-outline-dark: rgb(42 45 43);
-		--esx-panel-outline-light: rgb(44.3% 47.5% 44.3% / 0.18);
-		--esx-panel-outline: ;
+	--esx-panel-outline-light: rgb(44.3% 47.5% 44.3% / 0.18);
+	--esx-panel-outline: ;
 
 	/* always makes the item a circle */
 	--esx-border-radius-circle: 999px;
@@ -64,6 +64,29 @@
 	--esx-box-shadow-xl:
 		var(--esd-elevation-5-1-x) var(--esd-elevation-5-1-y) var(--esd-elevation-5-1-blur) var(--esd-elevation-5-1-spread) var(--esd-elevation-5-1-color),
 		var(--esd-elevation-5-2-x) var(--esd-elevation-5-2-y) var(--esd-elevation-5-2-blur) var(--esd-elevation-5-2-spread) var(--esd-elevation-5-2-color);
+}
+
+/* Tokens for styling compact mode. */
+:root {
+	--esx-internal-spacing-compact-xxs: 2px;
+	--esx-internal-spacing-compact-xs: 4px;
+	--esx-internal-spacing-compact-s: 8px;
+	--esx-internal-spacing-compact-m: 12px;
+	--esx-internal-spacing-compact-l: 16px;
+	--esx-internal-spacing-compact-xl: 20px;
+	--esx-internal-spacing-compact-xxl: 24px;
+}
+
+@media (pointer: fine) {
+	:root[compact] {
+		--esx-internal-spacing-compact-xxs: 1px;
+		--esx-internal-spacing-compact-xs: 2px;
+		--esx-internal-spacing-compact-s: 4px;
+		--esx-internal-spacing-compact-m: 8px;
+		--esx-internal-spacing-compact-l: 12px;
+		--esx-internal-spacing-compact-xl: 16px;
+		--esx-internal-spacing-compact-xxl: 20px;
+	}
 }
 
 *::-webkit-scrollbar {

@@ -50,7 +50,7 @@ export class NavHeaderComponent extends LitElement {
 						<es-input id="password" type="password" minlength=10 maxlength=50 clearable toggle-password placeholder="password"></es-input>
 					</li>
                     <li>
-                        <es-button @click=${ () => this.login() }>
+                        <es-button variant="neutral" @click=${ () => this.login() }>
                             Log in
                         </es-button>
                     </li>
@@ -72,7 +72,7 @@ export class NavHeaderComponent extends LitElement {
 		}
 
 		header {
-			background: #55d6aa;
+			background: #318f6f;
 			// background: var(--esd-surface5);
 		}
 
@@ -131,6 +131,10 @@ export class NavHeaderComponent extends LitElement {
 
 		nav a:hover::before {
 		width: 100%;
+		}
+
+		es-input::part(legend-base){
+			background-color: black;
 		}
 	`
 }

@@ -353,6 +353,8 @@ export function InitializeGameData(gameRecords:GameRecord[], playerData:PlayerMo
                 new ResultModel(playerData[3]!, 84), // leMalde
             ]
         },
+
+        
         {
             date: new Date(2023, 11, 21),
             game: games[9]!,
@@ -395,6 +397,10 @@ export function InitializeGameData(gameRecords:GameRecord[], playerData:PlayerMo
                 new ResultModel(playerData[16]!, 52), // Trippo
             ]
         },
+        JEG ER HER!!!
+
+
+        
         {
             date: new Date(2023, 11, 29),
             game: games[11]!,
