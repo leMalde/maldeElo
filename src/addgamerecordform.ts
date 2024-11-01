@@ -1,10 +1,10 @@
 import { LitElement, css, html, type PropertyValueMap } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
-import { configureFields, fieldCatalogToFormFields, type Code, type TypeaheadField } from '@eyeshare/web-components/concepts';
-import { LocalizeController } from '@eyeshare/web-components/controllers';
-import { queryEventPath, type CustomEventOf, type EventOf, type Use } from "@eyeshare/shared";
+import { configureFields, fieldCatalogToFormFields, type Code, type TypeaheadField } from '@eye-share/web-components/concepts';
+// import { LocalizeController } from '@eyeshare/web-components/controllers';
+import { queryEventPath, type CustomEventOf, type EventOf, type Use } from "@eye-share/shared";
 import { repeat } from "lit/directives/repeat.js";
-import { EsFormCmp, EsNumberCmp, EsTypeahead, EsTypeaheadCmp, type EsAlertCmp } from "@eyeshare/web-components/components";
+import { EsFormCmp, EsNumberCmp, EsTypeahead, EsTypeaheadCmp, type EsAlertCmp } from "@eye-share/web-components/components";
 import { when } from "lit/directives/when.js";
 import { GameMode, GameModel, GameType, ScoringType } from "./models/GameModel";
 import { PlayerModel } from "./models/PlayerModel";
@@ -39,7 +39,7 @@ export class RecordGamePageComponent extends LitElement {
         {}
     ]
 
-    protected readonly localize = new LocalizeController({ host: this });
+    // protected readonly localize = new LocalizeController({ host: this });
 
     protected recordGameForm: RecordGame = {
         date: new Date(Date.now()).toISOString(),
@@ -67,7 +67,7 @@ export class RecordGamePageComponent extends LitElement {
         })
 	};
 
-    protected fieldUse: Use<typeof this.fieldCat> = {
+    protected fieldUse: Use<keyof typeof this.fieldCat> = {
         Date: 100,
         Game: 110,
         NumberOfPlayers: 120
@@ -228,7 +228,6 @@ export class RecordGamePageComponent extends LitElement {
                         ({ render }) => render.editor({
                             context:  () => this.context,
                             model:    this.recordGameForm,
-                            localize: this.localize,
                             settings: {
                                 mode:                 'form',
                                 bare:                 'always',

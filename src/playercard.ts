@@ -1,10 +1,10 @@
-import type { EventOf, Use } from '@eyeshare/shared';
+import type { EventOf, Use } from '@eye-share/shared';
 import { html, LitElement, type PropertyValueMap } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { PlayerModel } from './models/PlayerModel';
 import { repeat } from 'lit/directives/repeat.js';
-import { configureFields, fieldCatalogToFormFields } from '@eyeshare/web-components/concepts';
-import { LocalizeController } from '@eyeshare/web-components/controllers';
+import { configureFields, fieldCatalogToFormFields } from '@eye-share/web-components/concepts';
+// import { LocalizeController } from '@eye-share/web-components/controllers';
 
 class Doc {
     FullName: string;
@@ -25,7 +25,7 @@ export class PlayerCardComponent extends LitElement {
 
     protected context = { testing: true };
 
-    protected readonly localize = new LocalizeController({ host: this });
+    // protected readonly localize = new LocalizeController({ host: this });
 
     protected playerForm: Doc = new Doc;
 
@@ -66,7 +66,7 @@ export class PlayerCardComponent extends LitElement {
 		}),
 	} as const;
     
-    protected fieldUse: Use<typeof this.fieldCat> = {
+    protected fieldUse: Use<keyof typeof this.fieldCat> = {
         FullName: 100,
         Rating: 110,
         Elo: 120,
@@ -145,7 +145,6 @@ export class PlayerCardComponent extends LitElement {
 					({ render }) => render.editor({
 						context:  () => this.context,
 						model:    this.playerForm,
-						localize: this.localize,
 						settings: {
 							mode:                 'form',
 							bare:                 'always',

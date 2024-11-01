@@ -1,0 +1,103 @@
+/**
+ * Additional css tokens not from design system.
+ */
+:root {
+	/* outline used in place of outline-decoration-secondary-gradient as the one in the design is a gradient and borders do not support this. */
+	--esx-panel-outline-dark: rgb(42 45 43);
+	--esx-panel-outline-light: rgb(44.3% 47.5% 44.3% / 0.18);
+	--esx-panel-outline: ;
+
+	/* always makes the item a circle */
+	--esx-border-radius-circle: 999px;
+	/* always rounds the edges into a pill shape */
+	--esx-border-radius-pill: 999px;
+
+	--esx-button-size-small: 24px;
+	--esx-button-size-medium: 40px;
+	--esx-button-size-large: 48px;
+	--esx-button-padding: 10px;
+
+	--esx-index-drawer: 700;
+	--esx-index-dialog: 800;
+	--esx-index-popout: 900;
+	--esx-index-toast: 950;
+	--esx-index-tooltip: 1000;
+
+	--esx-focus-ring: 3px solid var(--esd-focus);
+	--esx-focus-offset: 3px;
+	--esx-focus-transition: outline var(--esx-transition-fast) ease-out;
+	--esx-focus-index: 2;
+
+	--esx-spacing-xs: 4px;
+	--esx-spacing-s: 8px;
+	--esx-spacing-m: 12px;
+	--esx-spacing-l: 16px;
+	--esx-spacing-xl: 20px;
+	--esx-spacing-xxl: 24px;
+
+	--esx-internal-spacing-xxs: 2px;
+	--esx-internal-spacing-xs: 4px;
+	--esx-internal-spacing-s: 8px;
+	--esx-internal-spacing-m: 12px;
+	--esx-internal-spacing-l: 16px;
+	--esx-internal-spacing-xl: 20px;
+	--esx-internal-spacing-xxl: 24px;
+
+	--esx-transition-x-slow: 1000ms;
+	--esx-transition-slow: 500ms;
+	--esx-transition-medium: 300ms;
+	--esx-transition-fast: 150ms;
+	--esx-transition-x-fast: 75ms;
+
+	--esx-box-shadow-xs: var(--esd-elevation-1);
+	--esx-box-shadow-s: var(--esd-elevation-2);
+	--esx-box-shadow-m: var(--esd-elevation-3);
+	--esx-box-shadow-l: var(--esd-elevation-4);
+	--esx-box-shadow-xl: var(--esd-elevation-5);
+}
+
+/* Tokens for styling compact mode. */
+:root {
+	--esx-internal-spacing-compact-xxs: 2px;
+	--esx-internal-spacing-compact-xs: 4px;
+	--esx-internal-spacing-compact-s: 8px;
+	--esx-internal-spacing-compact-m: 12px;
+	--esx-internal-spacing-compact-l: 16px;
+	--esx-internal-spacing-compact-xl: 20px;
+	--esx-internal-spacing-compact-xxl: 24px;
+}
+
+@media (pointer: fine) {
+	:root[compact] {
+		--esx-internal-spacing-compact-xxs: 1px;
+		--esx-internal-spacing-compact-xs: 2px;
+		--esx-internal-spacing-compact-s: 4px;
+		--esx-internal-spacing-compact-m: 8px;
+		--esx-internal-spacing-compact-l: 12px;
+		--esx-internal-spacing-compact-xl: 16px;
+		--esx-internal-spacing-compact-xxl: 20px;
+	}
+}
+
+*::-webkit-scrollbar {
+	width: var(--scrollbar-width, 0.6rem);
+	height: var(--scrollbar-height, 0.6rem);
+}
+
+*::-webkit-scrollbar-track {
+	background: var(--scrollbar-track, inherit);
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb-bg, hsl(0, 0%, 70%));
+	border-radius: var(--scrollbar-thumb-border-radius, 2px);
+	background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+	background: var(--scrollbar-corner, var(--scrollbar-track, inherit));
+}
+
+.scroll-lock {
+	overflow: hidden !important;
+}

@@ -1,0 +1,22 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+	--esd-size-xs: 8px;
+	--esd-size-xxxs: 2px;
+	--esd-size-xxs: 4px;
+	--esd-size-s: 12px;
+	--esd-size-m: 16px;
+	--esd-size-l: 24px;
+	--esd-size-xl: 32px;
+	--esd-size-xxl: 64px;
+	--esd-size-xxxl: 128px;
+	--esd-border-radius-xs: 4px;
+	--esd-border-radius-s: 8px;
+	--esd-border-radius-m: 16px;
+	--esd-border-radius-l: 24px;
+	--esd-border-radius-pill: 999px;
+	--esd-border-width-xs: 1px;
+	--esd-border-width-s: 2px;
+}

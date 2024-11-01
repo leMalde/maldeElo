@@ -1,10 +1,10 @@
-import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
-import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
+import type { EsGridCmp } from '@eye-share/web-components/components/310.Grid/grid/grid.cmp.js';
+import type { EsGrid } from '@eye-share/web-components/components/310.Grid/grid/grid.types.js';
 import { css, html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ResultModel, type GameRecord } from './models/GameRecord';
 import { map } from 'lit/directives/map.js';
-import { configureFields, fieldToColumn } from '@eyeshare/web-components/concepts';
+import { configureFields } from '@eye-share/web-components/concepts';
 // import { MongoClient, ServerApiVersion } from 'mongodb'
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://lemalde:ZlXwNcxQUBJGJfAw@lemalde.fbr6b6x.mongodb.net/?retryWrites=true&w=majority";

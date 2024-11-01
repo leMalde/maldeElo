@@ -1,10 +1,10 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { configureFields, fieldCatalogToFormFields, type Code } from '@eyeshare/web-components/concepts';
-import { LocalizeController } from '@eyeshare/web-components/controllers';
-import type { Use } from "@eyeshare/shared";
+import { configureFields, fieldCatalogToFormFields, type Code } from '@eye-share/web-components/concepts';
+// import { LocalizeController } from '@eye-share/web-components/controllers';
+import type { Use } from "@eye-share/shared";
 import { repeat } from "lit/directives/repeat.js";
-import type { EsAlertCmp } from "@eyeshare/web-components/components";
+import type { EsAlertCmp } from "@eye-share/web-components/components";
 import { when } from "lit/directives/when.js";
 import { GameMode, GameType, ScoringType } from "./models/GameModel";
 
@@ -29,7 +29,7 @@ export class AddGamePageComponent extends LitElement {
     @state() protected alertVariant:EsAlertCmp['variant'] = 'error';
     @state() protected alertMessage:string = '';
 
-    protected readonly localize = new LocalizeController({ host: this });
+    // protected readonly localize = new LocalizeController({ host: this });
 
     protected newGameForm: NewGame = {
         bigGame: true,
@@ -112,7 +112,7 @@ export class AddGamePageComponent extends LitElement {
         }),
 	} as const;
 
-    protected fieldUse: Use<typeof this.fieldCat> = {
+    protected fieldUse: Use<keyof typeof this.fieldCat> = {
         Name: 100,
         BigGame: 110,
         GameType: 120,
@@ -180,14 +180,13 @@ export class AddGamePageComponent extends LitElement {
 		return html`
         <es-card class="card-overview">
             <strong>Add new game</strong>
-            <es-form disableFormStyling>
+            <es-form>
                 ${ repeat(
                         this.formFields,
                         ({ name }) => name,
                         ({ render }) => render.editor({
                             context:  () => this.context,
                             model:    this.newGameForm,
-                            localize: this.localize,
                             settings: {
                                 mode:                 'form',
                                 bare:                 'always',

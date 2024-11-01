@@ -1,9 +1,9 @@
 import { LitElement, css, html, type PropertyValueMap } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { PlayerModel } from "./models/PlayerModel";
-import { EsNumberCmp, EsTypeahead, EsTypeaheadCmp } from "@eyeshare/web-components/components";
-import type { TypeaheadField } from "@eyeshare/web-components/concepts";
-import type { EventOf } from "@eyeshare/shared";
+import { EsNumberCmp, EsTypeahead, EsTypeaheadCmp } from "@eye-share/web-components/components";
+import type { TypeaheadField } from "@eye-share/web-components/concepts";
+import type { EventOf } from "@eye-share/shared";
 import type { RecordScore } from "./models/GameRecord";
 
 @customElement( 'lem-playerscore' )

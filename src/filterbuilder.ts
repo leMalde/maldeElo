@@ -1,10 +1,10 @@
-import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
-import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
+import type { EsGridCmp } from '@eye-share/web-components/components/310.Grid/grid/grid.cmp.js';
+import type { EsGrid } from '@eye-share/web-components/components/310.Grid/grid/grid.types.js';
 import { LitElement, html, type PropertyValueMap, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { GameModel } from "./models/GameModel";
-import { GridDatasource } from '@eyeshare/web-components/components';
-import { configureFields, fieldToColumn } from '@eyeshare/web-components/concepts';
+import { GridDatasource } from '@eye-share/web-components/components';
+import { configureFields, fieldToColumn } from '@eye-share/web-components/concepts';
 
 type Context = {testing: boolean, defSupplier: string};
 const configure = configureFields<GameModel, Context>();

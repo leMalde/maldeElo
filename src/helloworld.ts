@@ -4,12 +4,12 @@ import { PlayerModel, PostProcess } from './models/PlayerModel';
 import { GameModel } from './models/GameModel';
 import { GameRecord, ResultModel } from './models/GameRecord';
 import { InitializeGameData, Recalculate } from './data/masterdata';
-import { translationFiles } from '@eyeshare/web-components/translations';
-import { translationLoader } from '@eyeshare/web-components/utilities';
+// import { translationFiles } from '@eye-share/web-components/translations';
+// import { translationLoader } from '@eye-share/web-components/utilities';
 import type { AllPlayersPageComponent } from './allplayers';
 import { repeat } from 'lit/directives/repeat.js';
 
-translationLoader(translationFiles);
+// translationLoader(translationFiles);
 
 @customElement( 'malde-helloworld' )
 export class HelloWorldComponent extends LitElement {
