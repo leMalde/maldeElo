@@ -1,5 +1,5 @@
 {
-	"extends": "@eyeshare/tsconfig",
+	"extends": "@eye-share/tsconfig",
 	"compilerOptions": {
 		"rootDir": ".",
 		"baseUrl": ".",
