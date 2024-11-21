@@ -40,6 +40,8 @@ export function CalculateChanges(gameRecord:GameRecord){
         result.playerrating = result.player.rating;
         result.percent = 100 * result.score / topscore;
         result.player.scorepercent += result.percent;
+        result.percent = Math.round(10 * result.percent) / 10;
+        // 
 
         if (result.playerrating > result.player.bestrating)
             result.player.bestrating = result.playerrating;

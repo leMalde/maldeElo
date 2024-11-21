@@ -4,7 +4,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ResultModel, type GameRecord } from './models/GameRecord';
 import { map } from 'lit/directives/map.js';
-import { configureFields } from '@eye-share/web-components/concepts';
+import { configureFields, fieldToColumn } from '@eye-share/web-components/concepts';
 // import { MongoClient, ServerApiVersion } from 'mongodb'
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://lemalde:ZlXwNcxQUBJGJfAw@lemalde.fbr6b6x.mongodb.net/?retryWrites=true&w=majority";
@@ -31,13 +31,17 @@ export class AllGamesPageComponent extends LitElement {
     protected gameGridConfig:EsGrid.Configuration<GameRecord> = {
         setup: {
             columns: [
-                configure.date("date", {label:"Dato"}), 
+                configure.date("date", {label:"Date"}), 
+                configure.text("game.name", {label:"Game"}, {minWidth: 160}),
+                configure.text("winner.username", {label:"Winner"}, {minWidth: 140}),
+                configure.text("game.gameType", {label:"GameType"}),
+                configure.text("game.gameMode", {label:"GameMode"}),
                 // {path:"date", label:"Date", pinned:false, pinnable: true},
-                {path:"game.name", label:"Game", minWidth: 160},
-                {path:"winner.username", label:"Winner", minWidth: 140},
-                {path:"game.gameType", label:"GameType"},
-                {path:"game.gameMode", label:"GameMode"},
-            ],
+                //  {path:"game.name", label:"Game", minWidth: 160},
+                // {path:"winner.username", label:"Winner", minWidth: 140},
+                // {path:"game.gameType", label:"GameType"},
+                // {path:"game.gameMode", label:"GameMode"},
+            ].map(cfg => fieldToColumn(cfg)),
             defaults: {
                 editable: false,
                 menu: false,
