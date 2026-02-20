@@ -1,6 +1,5 @@
-import type { EsGridCmp } from '@eye-share/web-components/components/310.Grid/grid/grid.cmp.js';
-import type { EsGrid } from '@eye-share/web-components/components/310.Grid/grid/grid.types.js';
-import { LitElement, html, type PropertyValueMap, css } from "lit";
+import type { EsGridCmp, EsGrid } from '@eye-share/web-components/components';
+import { LitElement, html, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { GameModel } from "./models/GameModel";
 import { GridDatasource } from '@eye-share/web-components/components';
@@ -16,16 +15,16 @@ export class FilterBuilderPageComponent extends LitElement {
     @query('es-grid') protected gamesGridEl:EsGridCmp;
 
     protected gamesGridConfig:EsGrid.Configuration<GameModel, Context> = {
-        context: () => ({testing: true, defSupplier: "leMalde"}),
+        rowContext: () => ({testing: true, defSupplier: "leMalde"}),
         setup: {
             columns: [
-                {path:"name", label:"Name", minWidth: 180},
-                {path:"gamesCount", label:"#Games"},
-                fieldToColumn(configure.switch('include', { label: 'Include'})),
-                {path:"bestEloPlayer", label: "Best elo", minWidth: 180},
-                {path:"bestRatingPlayer", label: "Best rating", minWidth: 180},
-                {path:"avgWinningScore", label: "Avg winning score", minWidth: 180},
-                {path:"bestWinningScore", label: "Highest score", minWidth: 180}
+                {get: m => m.name, label:"Name", minWidth: 180},
+                {get: m => m.gamesCount, label:"#Games"},
+                fieldToColumn(configure.switch(m => m.include)({ label: 'Include'})),
+                {get: m => m.bestEloPlayer, label: "Best elo", minWidth: 180},
+                {get: m => m.bestRatingPlayer, label: "Best rating", minWidth: 180},
+                {get: m => m.avgWinningScore, label: "Avg winning score", minWidth: 180},
+                {get: m => m.bestWinningScore, label: "Highest score", minWidth: 180}
                 // configure.switch('name', { label: 'Enabled', name: "NotLabel" }),
                 /*configure.switch('include', { label: 'Enabled', name: "NotLabel" }),
                 
@@ -56,8 +55,8 @@ export class FilterBuilderPageComponent extends LitElement {
         datasource: new GridDatasource<GameModel>(this.games)
     }
 
-    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        this.gamesGridConfig.datasource = this.games;
+    protected override willUpdate(_changedProperties: Map<PropertyKey, unknown>): void {
+        this.gamesGridConfig.datasource = new GridDatasource<GameModel>(this.games);
         this.gamesGridEl?.configure(this.gamesGridConfig);
         // this.gamesGridEl?.api.forceRender();
     }
@@ -65,7 +64,7 @@ export class FilterBuilderPageComponent extends LitElement {
     override async connectedCallback() {
         super.connectedCallback();
         await this.updateComplete;
-        this.gamesGridConfig.datasource = this.games;
+        this.gamesGridConfig.datasource = new GridDatasource<GameModel>(this.games);
         this.gamesGridEl.configure(this.gamesGridConfig);
     }
 

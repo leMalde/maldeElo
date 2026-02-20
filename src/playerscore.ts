@@ -1,8 +1,8 @@
 import { LitElement, css, html, type PropertyValueMap } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { PlayerModel } from "./models/PlayerModel";
-import { EsNumberCmp, EsTypeahead, EsTypeaheadCmp } from "@eye-share/web-components/components";
-import type { TypeaheadField } from "@eye-share/web-components/concepts";
+import { EsNumberCmp, EsTypeaheadCmp } from "@eye-share/web-components/components";
+import { EsLookup, type TypeaheadField } from "@eye-share/web-components/concepts";
 import type { EventOf } from "@eye-share/shared";
 import type { RecordScore } from "./models/GameRecord";
 
@@ -19,11 +19,11 @@ export class PlayerScoreComponent extends LitElement {
         name: 'players',
         label: 'Players',
         placeholder: 'Select a player',
-        rendering: EsTypeahead.objectRendering<PlayerModel>([ 'username' ]),
+        rendering: EsLookup.objectRendering<PlayerModel>([ 'username' ]),
         datasource: {
             list: this.players,
         },
-        transform: EsTypeahead.identityTransform<PlayerModel>()
+        transform: EsLookup.identityTransform<PlayerModel>()
     }
 
     override async connectedCallback() {

@@ -16,10 +16,7 @@ export class PlayerModel {
 }
 
 export function AddOrIncrease(record: Record<string, number>, key: string){
-    if (record.hasOwnProperty(key))
-        record[key] ++;
-    else
-        record[key] = 1;
+    record[key] = (record[key] ?? 0) + 1;
 }
 
 export function PostProcess(player: PlayerModel){

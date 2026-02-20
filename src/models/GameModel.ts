@@ -1,5 +1,3 @@
-import type { CheckableField } from "@eyeshare/web-components/concepts";
-import type { CheckableElement } from "@eyeshare/web-components/mixins";
 import type { GameRecord } from "./GameRecord";
 
 export class GameModel {

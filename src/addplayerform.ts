@@ -30,14 +30,14 @@ export class AddPlayerPageComponent extends LitElement {
     protected newPlayerForm: NewPlayer = new NewPlayer;
 
     protected fieldCat = {		
-        Name: configure.text('name', {
+        Name: configure.text(m => m.name)({
             label: 'Full name',
             placeholder: "Full name",
             minlength: 3,
             maxlength: 45,
 
 		}),
-        Username: configure.text('username', {
+        Username: configure.text(m => m.username)({
             label: 'Username',
             placeholder: "Username",
             minlength: 3,
@@ -118,7 +118,7 @@ export class AddPlayerPageComponent extends LitElement {
                             context:  () => this.context,
                             model:    this.newPlayerForm,
                             settings: {
-                                mode:                 'form',
+                                container:            'panel',
                                 bare:                 'always',
                                 justify:              'end',
                                 suppressHelpText:     true,

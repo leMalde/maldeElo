@@ -74,28 +74,7 @@ export class HelloWorldComponent extends LitElement {
 	@property({type: Array})
 	protected filteredPlayerData:PlayerModel[] = [];
 
-	protected gameRecords:GameRecord[] = []
-
-	protected playerData2:{[name: string] : PlayerModel} = {
-		"Espen": new PlayerModel("Espen"),
-		"Roen": new PlayerModel("Roen"),
-		"Magga": new PlayerModel("Magga"),
-		"leMalde": new PlayerModel("leMalde"),
-		"Gaute": new PlayerModel("Gaute"),
-		"Katrine": new PlayerModel("Katrine"),
-		"Simen": new PlayerModel("Simen"),
-		"Nora": new PlayerModel("Nora"),
-		"Jostein": new PlayerModel("Jostein"),
-		"Elisa": new PlayerModel("Elisa"),
-		"Steini": new PlayerModel("Steini"),
-		"Marita": new PlayerModel("Marita"),
-		"Marius": new PlayerModel("Marius"),
-		"Maren": new PlayerModel("Maren"),
-		"Nobody": new PlayerModel("Nobody"),
-		"Rohan": new PlayerModel("Rohan"),
-		"Trippo": new PlayerModel("Trippo"),
-		"Atle": new PlayerModel("Atle"),
-	};
+	protected gameRecords:GameRecord[] = [];
 
 	private async fetchUsers(): Promise<PlayerModel[]> {	  
 		const res = await fetch('/elosystem/users.php', {

@@ -1,5 +1,7 @@
-@import "./css/variables-dark.css";
-@import "./css/variables-extra.css";
+@import "./vendor/styles/vars-extra.css";
+@import "./vendor/styles/vars-styles.css";
+@import "./vendor/styles/vars-size-default.css";
+@import "./vendor/styles/vars-theme-dark.css";
 
 html,
 body {

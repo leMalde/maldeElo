@@ -1,10 +1,10 @@
-import { LitElement, css, html, type PropertyValueMap } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { configureFields, fieldCatalogToFormFields, type Code, type TypeaheadField } from '@eye-share/web-components/concepts';
 // import { LocalizeController } from '@eyeshare/web-components/controllers';
 import { queryEventPath, type CustomEventOf, type EventOf, type Use } from "@eye-share/shared";
 import { repeat } from "lit/directives/repeat.js";
-import { EsFormCmp, EsNumberCmp, EsTypeahead, EsTypeaheadCmp, type EsAlertCmp } from "@eye-share/web-components/components";
+import { EsFormCmp, EsNumberCmp, EsTypeaheadCmp, type EsAlertCmp } from "@eye-share/web-components/components";
 import { when } from "lit/directives/when.js";
 import { GameMode, GameModel, GameType, ScoringType } from "./models/GameModel";
 import { PlayerModel } from "./models/PlayerModel";
@@ -47,7 +47,7 @@ export class RecordGamePageComponent extends LitElement {
     };
 
     protected fieldCat = {		
-        Game: configure.typeaheadPick('game', {
+        Game: configure.typeaheadPick(m => m.game)({
             label: 'Game',
             props: ["name"],
             datasource: {
@@ -55,15 +55,14 @@ export class RecordGamePageComponent extends LitElement {
             }
 
 		}),
-        Date: configure.datetime('date', {
+        Date: configure.datetime(m => m.date)({
             label: 'Date'
 		}),
-        NumberOfPlayers: configure.number('numberofplayers', {
+        NumberOfPlayers: configure.number(m => m.numberofplayers)({
             label: "Number of players",
+            precision: 'integer',
             min: 2,
             max: 25,
-            step: 1,
-            
         })
 	};
 
@@ -80,10 +79,10 @@ export class RecordGamePageComponent extends LitElement {
         await this.updateComplete;
     }
 
-    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    protected override willUpdate(_changedProperties: Map<PropertyKey, unknown>): void {
         
         if(_changedProperties.has("games")){
-            this.fieldCat.Game = configure.typeaheadPick('game', {
+            this.fieldCat.Game = configure.typeaheadPick(m => m.game)({
                 label: 'Game',
                 props: ["name"],
                 placeholder: 'Select a game',
@@ -229,7 +228,7 @@ export class RecordGamePageComponent extends LitElement {
                             context:  () => this.context,
                             model:    this.recordGameForm,
                             settings: {
-                                mode:                 'form',
+                                container:            'panel',
                                 bare:                 'always',
                                 justify:              'end',
                                 suppressHelpText:     true,
@@ -238,25 +237,6 @@ export class RecordGamePageComponent extends LitElement {
                         }),
                     ) }
             </es-form>
-            <!--
-            <es-number 
-                size                             = "small"
-                value                            = "4"
-                label                            = "Number of players"
-                maximum-fraction-digits          = 0
-                minimum-fraction-digits          = 0
-                maximum-rendered-fraction-digits = 0
-                max                              = 25
-                min                              = 2>
-                <span slot="help-text">Integers</span>
-                <es-button slot="start" @click=${ this.decrement } tabindex="-1">
-                    <es-icon iconId="esd:arrow_20-down"></es-icon>
-                </es-button>
-                <es-button slot="end" @click=${ this.increment } tabindex="-1">
-                    <es-icon iconId="esd:arrow_20-up"></es-icon>
-                </es-button>
-            </es-number>
-            -->
             ${ repeat(this.scoreRecords, (scoreRecord, index) => html`
                             <lem-playerscore .players=${this.players} .recordScore=${scoreRecord}></lem-playerscore>
                             ` ) }

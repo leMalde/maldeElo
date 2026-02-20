@@ -48,17 +48,17 @@ export class AddGamePageComponent extends LitElement {
     };
 
     protected fieldCat = {		
-        Name: configure.text('name', {
+        Name: configure.text(m => m.name)({
             label: 'Full name',
             placeholder: "Name",
             minlength: 3,
             maxlength: 45,
 
 		}),
-        BigGame: configure.switch('bigGame', {
+        BigGame: configure.switch(m => m.bigGame)({
             label: 'Big game',
 		}),
-        GameType: configure.typeaheadPick('gameType', {
+        GameType: configure.typeaheadPick(m => m.gameType)({
             label: 'Game type',
             props: [ "Key" ],
             datasource: {
@@ -78,7 +78,7 @@ export class AddGamePageComponent extends LitElement {
                 ]
             }
         }),
-        GameMode: configure.typeaheadPick('gameMode', {
+        GameMode: configure.typeaheadPick(m => m.gameMode)({
             label: 'Game mode',
             props: [ "Key" ],
             datasource: {
@@ -94,7 +94,7 @@ export class AddGamePageComponent extends LitElement {
                 ]
             }
         }),
-        ScoringType: configure.typeaheadPick('scoringType', {
+        ScoringType: configure.typeaheadPick(m => m.scoringType)({
             label: 'Scoring type',
             props: [ "Key" ],
             datasource: {
@@ -188,7 +188,7 @@ export class AddGamePageComponent extends LitElement {
                             context:  () => this.context,
                             model:    this.newGameForm,
                             settings: {
-                                mode:                 'form',
+                                container:            'panel',
                                 bare:                 'always',
                                 justify:              'start',
                                 suppressHelpText:     true,

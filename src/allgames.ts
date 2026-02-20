@@ -1,23 +1,10 @@
-import type { EsGridCmp } from '@eye-share/web-components/components/310.Grid/grid/grid.cmp.js';
-import type { EsGrid } from '@eye-share/web-components/components/310.Grid/grid/grid.types.js';
+import type { EsGridCmp, EsGrid } from '@eye-share/web-components/components';
+import { GridDatasource } from '@eye-share/web-components/components';
 import { css, html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import { ResultModel, type GameRecord } from './models/GameRecord';
 import { map } from 'lit/directives/map.js';
 import { configureFields, fieldToColumn } from '@eye-share/web-components/concepts';
-// import { MongoClient, ServerApiVersion } from 'mongodb'
-// const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://lemalde:ZlXwNcxQUBJGJfAw@lemalde.fbr6b6x.mongodb.net/?retryWrites=true&w=majority";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(uri);
-
-/*const clientOld = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});*/
 
 const configure = configureFields<GameRecord>();
 
@@ -29,18 +16,14 @@ export class AllGamesPageComponent extends LitElement {
     @query('es-grid') protected gameGridEl:EsGridCmp
     
     protected gameGridConfig:EsGrid.Configuration<GameRecord> = {
+        rowContext: () => ({}),
         setup: {
             columns: [
-                configure.date("date", {label:"Date"}), 
-                configure.text("game.name", {label:"Game"}, {minWidth: 160}),
-                configure.text("winner.username", {label:"Winner"}, {minWidth: 140}),
-                configure.text("game.gameType", {label:"GameType"}),
-                configure.text("game.gameMode", {label:"GameMode"}),
-                // {path:"date", label:"Date", pinned:false, pinnable: true},
-                //  {path:"game.name", label:"Game", minWidth: 160},
-                // {path:"winner.username", label:"Winner", minWidth: 140},
-                // {path:"game.gameType", label:"GameType"},
-                // {path:"game.gameMode", label:"GameMode"},
+                configure.date(m => m.date)({label:"Date"}), 
+                configure.text(m => m.game.name)({label:"Game"}, {minWidth: 160}),
+                configure.text(m => m.winner?.username)({label:"Winner"}, {minWidth: 140}),
+                configure.text(m => m.game.gameType)({label:"GameType"}),
+                configure.text(m => m.game.gameMode)({label:"GameMode"}),
             ].map(cfg => fieldToColumn(cfg)),
             defaults: {
                 editable: false,
@@ -131,7 +114,7 @@ export class AllGamesPageComponent extends LitElement {
 
             }
         },        
-        datasource: this.gameRecords,
+        datasource: new GridDatasource<GameRecord>(this.gameRecords),
     }
 
     override async connectedCallback() {
@@ -139,34 +122,20 @@ export class AllGamesPageComponent extends LitElement {
 
         await this.updateComplete;
 
-        this.gameGridConfig.datasource = this.gameRecords;
+        this.gameGridConfig.datasource = new GridDatasource<GameRecord>(this.gameRecords);
         // this.gameRecords.forEach(CalculateChanges);
 
         this.gameGridEl.configure(this.gameGridConfig);
     }
 
-    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        this.gameGridConfig.datasource = this.gameRecords;
+    protected override willUpdate(_changedProperties: Map<PropertyKey, unknown>): void {
+        this.gameGridConfig.datasource = new GridDatasource<GameRecord>(this.gameRecords);
         this.gameGridEl?.configure(this.gameGridConfig);
         // this.playerGridEl?.api.forceRender();
     }
 
-    /*protected saveGameRecords = () => {
-        try {
-            // Connect the client to the server	(optional starting in v4.7)
-            client.connect();
-            // Send a ping to confirm a successful connection
-            client.db("admin").command({ ping: 1 });
-            console.log("Pinged your deployment. You successfully connected to MongoDB!");
-          } finally {
-            // Ensures that the client will close when you finish/error
-            client.close();
-          }
-    }*/
-
 	override render() {
 		return html`
-        <!--<es-button @click=${ this.saveGameRecords } type="tonal">Save data</es-button>-->
 		<es-grid></es-grid>
 		`;
 	}

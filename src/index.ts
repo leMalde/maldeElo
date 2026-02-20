@@ -10,8 +10,7 @@ import './addplayerform.js';
 import './addgamerecordform.js';
 import './navheader.js';
 import {enTranslations, nbTranslations} from "@eye-share/web-components/translations"
-import { isDottedTerm, Localizer, useLocalizer } from "@eye-share/web-components/utilities";
-import { registerConsoleFilter } from "@eye-share/shared";
+import { isDottedTerm, Localizer, useLocalizer, registerConsoleFilter } from "@eye-share/shared";
 import { registerSymbolsIconLibrary, setIconBasePath } from "@eye-share/web-components/components";
 
 

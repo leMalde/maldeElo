@@ -30,37 +30,37 @@ export class PlayerCardComponent extends LitElement {
     protected playerForm: Doc = new Doc;
 
     protected fieldCat = {
-		FullName: configure.text('FullName', {
+		FullName: configure.text(m => m.FullName)({
             readonly: true,
             label: 'Full name',
             placeholder: "I'm a loser"
 		}),
-        FavOpp: configure.text('FavOpp', {
+        FavOpp: configure.text(m => m.FavOpp)({
             readonly: true,
             label: 'Favorite opponent',
             placeholder: "I'm a loser"
 		}),
-		WorstOpp: configure.text('WorstOpp', {
+		WorstOpp: configure.text(m => m.WorstOpp)({
 			readonly: true,
             label: 'Worst opponent',
             placeholder: "I'm a winner"
 		}),
-		TotalGames: configure.text('TotalGames', {
+		TotalGames: configure.text(m => m.TotalGames)({
 			label:    'Total games',
 			helpText: 'I am here to help',
             readonly: true
 		}),
-		Elo: configure.text('Elo', {
+		Elo: configure.text(m => m.Elo)({
 			label:    'Elo',
 			helpText: 'I am here to help',
             readonly: true
 		}),        
-		Rating: configure.text('Rating', {
+		Rating: configure.text(m => m.Rating)({
 			label:    'Rating',
 			helpText: 'I am here to help',
             readonly: true
 		}),
-        FavGame: configure.text('FavGame', {
+        FavGame: configure.text(m => m.FavGame)({
             label: 'Favorite game',
             readonly: true
 		}),
@@ -146,7 +146,7 @@ export class PlayerCardComponent extends LitElement {
 						context:  () => this.context,
 						model:    this.playerForm,
 						settings: {
-							mode:                 'form',
+							container:            'panel',
 							bare:                 'always',
 							justify:              'end',
 							suppressHelpText:     true,

@@ -1,5 +1,6 @@
 node_modules
 dist
 vendor
+public/vendor
 *.db-shm
 *.db-wal

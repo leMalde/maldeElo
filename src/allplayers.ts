@@ -1,6 +1,6 @@
-import type { EsGridCmp } from '@eyeshare/web-components/components/310.Grid/grid/grid.cmp.js';
-import type { EsGrid } from '@eyeshare/web-components/components/310.Grid/grid/grid.types.js';
-import { html, LitElement, type PropertyValueMap } from 'lit';
+import type { EsGridCmp, EsGrid } from '@eye-share/web-components/components';
+import { GridDatasource } from '@eye-share/web-components/components';
+import { html, LitElement } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 import type { PlayerModel } from './models/PlayerModel';
 
@@ -17,25 +17,26 @@ export class AllPlayersPageComponent extends LitElement {
 
     @query('es-grid') protected playerGridEl:EsGridCmp;
 
-    protected override willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        this.playerGridConfig.datasource = this.playerData;
+    protected override willUpdate(_changedProperties: Map<PropertyKey, unknown>): void {
+        this.playerGridConfig.datasource = new GridDatasource<PlayerModel>(this.playerData);
         this.playerGridEl?.configure(this.playerGridConfig);
         // this.playerGridEl?.api.forceRender();
     }
 
     protected playerGridConfig:EsGrid.Configuration<PlayerModel> = {
+        rowContext: () => ({}),
         setup: {
             columns: [ 
-                {path:"username", label:"Name", pinned:true, pinnable: true},
-                {path:"rating", label:"Rating", width: 130},                
-                {path:"bestrating", label:"Best Rating", width: 130},                
-                {path:"worstrating", label:"Worst Rating", width: 130},
-                {path:"games", label:"#Games"},
-                {path:"winpercent", label:"Win %"},
-                {path:"elo", label:"Elo rating", width: 130},
-                {path:"bestelo", label:"Best Elo", width: 130},
-                {path:"worstelo", label:"Worst Elo", width: 130},                
-                {path:"scorepercent", label: "Avg Score %", width: 130}
+                {get: m => m.username, label:"Name", pinned:true, pinnable: true},
+                {get: m => m.rating, label:"Rating", width: 130},                
+                {get: m => m.bestrating, label:"Best Rating", width: 130},                
+                {get: m => m.worstrating, label:"Worst Rating", width: 130},
+                {get: m => m.games, label:"#Games"},
+                {get: m => m.winpercent, label:"Win %"},
+                {get: m => m.elo, label:"Elo rating", width: 130},
+                {get: m => m.bestelo, label:"Best Elo", width: 130},
+                {get: m => m.worstelo, label:"Worst Elo", width: 130},                
+                {get: m => m.scorepercent, label: "Avg Score %", width: 130}
             ],
             defaults: {
                 editable: false,
@@ -52,13 +53,14 @@ export class AllPlayersPageComponent extends LitElement {
                 checkbox: true,
             }
         },        
-        datasource: this.playerData,
+        //datasource: this.playerData,
+        datasource: new GridDatasource<PlayerModel>(this.playerData),
     }
 
     override async connectedCallback() {
         super.connectedCallback();
         await this.updateComplete;
-        this.playerGridConfig.datasource = this.playerData;
+        this.playerGridConfig.datasource = new GridDatasource<PlayerModel>(this.playerData);
         this.playerGridEl.configure(this.playerGridConfig);
     }
 
