@@ -8,6 +8,7 @@ export function CalculateChanges(gameRecord:GameRecord){
     var results = gameRecord.results.sort((a, b) =>  a.rank - b.rank);
     results.forEach(ResetResultValues);
     var topscore = 0;
+    var ratingChange = (gameRecord.game.bigGame ? 100 : 20);
 
     for (var i = 0; i < results.length; i++) {
         const resultA = results[i]!;
@@ -28,8 +29,8 @@ export function CalculateChanges(gameRecord:GameRecord){
             var change = ChangeInElo(resultA.player.elo, resultB.player.elo, wA);
             resultA.elochange += change;
             resultB.elochange -= change;
-            resultA.ratingchange += 100 * (wA - 0.5);
-            resultB.ratingchange -= 100 * (wA - 0.5);
+            resultA.ratingchange += ratingChange * (wA - 0.5);
+            resultB.ratingchange -= ratingChange * (wA - 0.5);
         } 
     }
 

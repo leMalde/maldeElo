@@ -102,11 +102,7 @@ export class AddPlayerPageComponent extends LitElement {
 
     handleAfterHide = (ev: Event) => {
         const alert = ev.target as EsAlertCmp;
-        // alert.open = false;
-        // this.esAlertEl.style.display = 'none';
-        // alert.variant = "error";
         this.showAlert = false;
-        // setTimeout(() => (alert && (this.showAlert = false)),0);
     };
 
 

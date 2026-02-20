@@ -1,25 +1,33 @@
-import type { EsInputCmp } from "@eyeshare/web-components/components";
+import type { EsAlertCmp, EsInputCmp } from "@eye-share/web-components/components";
 import { LitElement, css, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 
 @customElement( 'lem-navheader' )
 export class NavHeaderComponent extends LitElement {
+
+	@property() public username:string = '';
     
     @query("#username") protected UsernameEl:EsInputCmp 
     @query("#password") protected PasswordEl:EsInputCmp
+	@query("es-alert") protected esAlertEl:EsAlertCmp
+    
+    @state() protected showAlert = false;
+    @state() protected alertVariant:EsAlertCmp['variant'] = 'error';
+    @state() protected alertMessage:string = '';
 
     async login(){
         var nameRegex = /^[\w]{3,15}$/i;
         if (!this.PasswordEl.value || !nameRegex.test(this.PasswordEl.value)) {
-            // this.showAlert = true;
-            // this.alertMessage = "Invalid full name";
+            this.showAlert = true;
+            this.alertMessage = "That is Espen's password";
             return;
         }
 
         var usernameRegex = /^[a-zA-Z]{3,15}$/;
         if (!this.UsernameEl.value || !usernameRegex.test(this.UsernameEl.value)) {
-            // this.showAlert = true;
-            // this.alertMessage = "Invalid username";
+            this.showAlert = true;
+            this.alertMessage = "Invalid username: " + usernameRegex;
             return;
         }
 
@@ -34,7 +42,31 @@ export class NavHeaderComponent extends LitElement {
                 "username": this.UsernameEl.value
             }),
 		});
+
+		if (!response.ok){
+            this.showAlert = true;
+            this.alertVariant = 'error';
+            this.alertMessage = await response.text();
+            // if (response.body !== null)
+                // this.alertMessage = new TextDecoder("utf-8").decode(response.body);
+        }else{
+            this.showAlert = true;
+            this.alertVariant = 'success';
+            this.alertMessage = await response.text();
+
+            const options = {
+                detail: {newname: this.UsernameEl.value},
+                bubbles: true,
+                composed: true
+              };
+            this.dispatchEvent(new CustomEvent('name-changed', options));
+        }
     }
+
+	handleAfterHide = (ev: Event) => {
+        const alert = ev.target as EsAlertCmp;
+        this.showAlert = false;
+    };
     
     override render() {
 		return html`
@@ -43,17 +75,40 @@ export class NavHeaderComponent extends LitElement {
 			<h1 class="logo"></h1>
 			<nav>
 				<ul>
-					<li>
-						<es-input id="username" type="text" minlength=10 maxlength=50 clearable placeholder="username"></es-input>
-					</li>
-					<li>
-						<es-input id="password" type="password" minlength=10 maxlength=50 clearable toggle-password placeholder="password"></es-input>
-					</li>
-                    <li>
-                        <es-button variant="neutral" @click=${ () => this.login() }>
-                            Log in
-                        </es-button>
-                    </li>
+				
+					${when(this.username != '', () => html`
+						<li>
+							Hello, ${this.username}!
+						</li>	
+					`)}
+
+					${when(this.showAlert,  ()  => html`
+						<li>
+						<es-alert
+							class="alert-closable"
+							variant=${this.alertVariant}
+							open
+							closable
+							@es-after-hide=${ this.handleAfterHide }
+						>
+						${this.alertMessage}
+						</es-alert>
+						</li>
+					`)}
+					
+					${when(this.username == '', () => html`
+						<li>
+							<es-input id="username" type="text" minlength=10 maxlength=50 clearable placeholder="username"></es-input>
+						</li>
+						<li>
+							<es-input id="password" type="password" minlength=10 maxlength=50 clearable toggle-password placeholder="password"></es-input>
+						</li>
+						<li>
+							<es-button variant="neutral" @click=${ () => this.login() }>
+								Log in
+							</es-button>
+						</li>
+					`)}
 				</ul>
 			</nav>
 			</div>

@@ -15,6 +15,10 @@ import { repeat } from 'lit/directives/repeat.js';
 export class HelloWorldComponent extends LitElement {
 	@query('lem-allplayers') protected playerDataEl:AllPlayersPageComponent
 
+
+	@property()
+	protected username:string = '';
+
 	@property({type: Array})
 	protected games:GameModel[] = [
 		/*new GameModel("Beyond the sun", true), // 0 
@@ -251,9 +255,13 @@ export class HelloWorldComponent extends LitElement {
 		this.filteredPlayerData.sort((a,b) => b.rating - a.rating);
 	}
 
+	updateUsername(e:CustomEvent) {
+		this.username = e.detail.newname;
+	  }
+
 	override render() {
 		return html`
-		<lem-navheader></lem-navheader>
+		<lem-navheader .username=${this.username} @name-changed="${this.updateUsername}"></lem-navheader>
 		<es-tab-group>
 			<es-tab slot="nav" panel="leaderboard">Leaderboard</es-tab>
 			<es-tab slot="nav" panel="filterbuilder">Filter Builder</es-tab>
